@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -57,15 +58,32 @@ class MainPage extends StatelessWidget {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Open a log file',
       type: FileType.custom,
-      allowedExtensions: ['.bz2'],
+      allowedExtensions: ['bz2'],
       lockParentWindow: true,
     );
 
     if (result != null) {
-      File file = File(result.files.single.path!);
-      print(file.uri);
+      _readFile(result);
     } else {
       // User canceled the picker
     }
+  }
+
+  Future<void> _readFile(FilePickerResult result) async {
+    if (result.files.single.bytes != null) {
+      _decodeBytes(result.files.single.bytes!);
+    } else {
+      final file = File(result.files.single.path!);
+      final randomAccessFile = file.openSync();
+      final length = randomAccessFile.lengthSync();
+      final bytes = randomAccessFile.readSync(length);
+      _decodeBytes(bytes);
+      randomAccessFile.closeSync();
+    }
+  }
+
+  Future<void> _decodeBytes(Uint8List bytes) async {
+    // Decode the bytes
+    print('File length: ${bytes.length}');
   }
 }
