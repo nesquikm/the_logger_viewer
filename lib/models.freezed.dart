@@ -177,10 +177,9 @@ mixin _$LogRecord {
   String get loggerName => throw _privateConstructorUsedError;
   @JsonKey(name: 'id')
   int get id => throw _privateConstructorUsedError;
-
-  /// should be a DateTime
   @JsonKey(name: 'record_timestamp')
-  String get recordTimestamp => throw _privateConstructorUsedError;
+  @DateTimeSerializer()
+  DateTime get recordTimestamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'session_id')
   int get sessionId => throw _privateConstructorUsedError;
 
@@ -211,7 +210,9 @@ abstract class $LogRecordCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: 'logger_name') String loggerName,
       @JsonKey(name: 'id') int id,
-      @JsonKey(name: 'record_timestamp') String recordTimestamp,
+      @JsonKey(name: 'record_timestamp')
+      @DateTimeSerializer()
+      DateTime recordTimestamp,
       @JsonKey(name: 'session_id') int sessionId,
       @JsonKey(name: 'level') int level,
       @JsonKey(name: 'message') String message,
@@ -255,7 +256,7 @@ class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
       recordTimestamp: null == recordTimestamp
           ? _value.recordTimestamp
           : recordTimestamp // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
       sessionId: null == sessionId
           ? _value.sessionId
           : sessionId // ignore: cast_nullable_to_non_nullable
@@ -295,7 +296,9 @@ abstract class _$$LogRecordImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: 'logger_name') String loggerName,
       @JsonKey(name: 'id') int id,
-      @JsonKey(name: 'record_timestamp') String recordTimestamp,
+      @JsonKey(name: 'record_timestamp')
+      @DateTimeSerializer()
+      DateTime recordTimestamp,
       @JsonKey(name: 'session_id') int sessionId,
       @JsonKey(name: 'level') int level,
       @JsonKey(name: 'message') String message,
@@ -337,7 +340,7 @@ class __$$LogRecordImplCopyWithImpl<$Res>
       recordTimestamp: null == recordTimestamp
           ? _value.recordTimestamp
           : recordTimestamp // ignore: cast_nullable_to_non_nullable
-              as String,
+              as DateTime,
       sessionId: null == sessionId
           ? _value.sessionId
           : sessionId // ignore: cast_nullable_to_non_nullable
@@ -372,7 +375,9 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
   const _$LogRecordImpl(
       {@JsonKey(name: 'logger_name') required this.loggerName,
       @JsonKey(name: 'id') required this.id,
-      @JsonKey(name: 'record_timestamp') required this.recordTimestamp,
+      @JsonKey(name: 'record_timestamp')
+      @DateTimeSerializer()
+      required this.recordTimestamp,
       @JsonKey(name: 'session_id') required this.sessionId,
       @JsonKey(name: 'level') required this.level,
       @JsonKey(name: 'message') required this.message,
@@ -389,11 +394,10 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
   @override
   @JsonKey(name: 'id')
   final int id;
-
-  /// should be a DateTime
   @override
   @JsonKey(name: 'record_timestamp')
-  final String recordTimestamp;
+  @DateTimeSerializer()
+  final DateTime recordTimestamp;
   @override
   @JsonKey(name: 'session_id')
   final int sessionId;
@@ -480,7 +484,9 @@ abstract class _LogRecord implements LogRecord {
   const factory _LogRecord(
       {@JsonKey(name: 'logger_name') required final String loggerName,
       @JsonKey(name: 'id') required final int id,
-      @JsonKey(name: 'record_timestamp') required final String recordTimestamp,
+      @JsonKey(name: 'record_timestamp')
+      @DateTimeSerializer()
+      required final DateTime recordTimestamp,
       @JsonKey(name: 'session_id') required final int sessionId,
       @JsonKey(name: 'level') required final int level,
       @JsonKey(name: 'message') required final String message,
@@ -500,10 +506,9 @@ abstract class _LogRecord implements LogRecord {
   @JsonKey(name: 'id')
   int get id;
   @override
-
-  /// should be a DateTime
   @JsonKey(name: 'record_timestamp')
-  String get recordTimestamp;
+  @DateTimeSerializer()
+  DateTime get recordTimestamp;
   @override
   @JsonKey(name: 'session_id')
   int get sessionId;

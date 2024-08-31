@@ -24,9 +24,9 @@ sealed class LogRecord with _$LogRecord {
   const factory LogRecord({
     @JsonKey(name: 'logger_name') required String loggerName,
     @JsonKey(name: 'id') required int id,
-
-    /// should be a DateTime
-    @JsonKey(name: 'record_timestamp') required String recordTimestamp,
+    @JsonKey(name: 'record_timestamp')
+    @DateTimeSerializer()
+    required DateTime recordTimestamp,
     @JsonKey(name: 'session_id') required int sessionId,
 
     /// should be a LogLevel
@@ -34,10 +34,7 @@ sealed class LogRecord with _$LogRecord {
     @JsonKey(name: 'message') required String message,
     @JsonKey(name: 'error') required String? error,
     @JsonKey(name: 'stack_trace') required String? stackTrace,
-    @JsonKey(name: 'time')
-    // should be a DateTime
-    @TimestampSerializer()
-    required DateTime time,
+    @JsonKey(name: 'time') @TimestampSerializer() required DateTime time,
   }) = _LogRecord;
 
   /// Create a LogRecord from JSON.
@@ -56,4 +53,16 @@ class TimestampSerializer implements JsonConverter<DateTime, int> {
 
   @override
   int toJson(DateTime date) => date.microsecondsSinceEpoch;
+}
+
+/// DateTime string serializer.
+class DateTimeSerializer implements JsonConverter<DateTime, String> {
+  /// Default constructor.
+  const DateTimeSerializer();
+
+  @override
+  DateTime fromJson(String string) => DateTime.parse(string);
+
+  @override
+  String toJson(DateTime date) => date.toString();
 }

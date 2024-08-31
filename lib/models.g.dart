@@ -22,7 +22,8 @@ _$LogRecordImpl _$$LogRecordImplFromJson(Map<String, dynamic> json) =>
     _$LogRecordImpl(
       loggerName: json['logger_name'] as String,
       id: (json['id'] as num).toInt(),
-      recordTimestamp: json['record_timestamp'] as String,
+      recordTimestamp: const DateTimeSerializer()
+          .fromJson(json['record_timestamp'] as String),
       sessionId: (json['session_id'] as num).toInt(),
       level: (json['level'] as num).toInt(),
       message: json['message'] as String,
@@ -35,7 +36,8 @@ Map<String, dynamic> _$$LogRecordImplToJson(_$LogRecordImpl instance) =>
     <String, dynamic>{
       'logger_name': instance.loggerName,
       'id': instance.id,
-      'record_timestamp': instance.recordTimestamp,
+      'record_timestamp':
+          const DateTimeSerializer().toJson(instance.recordTimestamp),
       'session_id': instance.sessionId,
       'level': instance.level,
       'message': instance.message,
