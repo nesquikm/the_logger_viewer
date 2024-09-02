@@ -56,25 +56,35 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-        body: MultiSplitView(
-          axis: Axis.vertical,
-          controller: _controller,
-          builder: (context, area) => switch (area.data) {
-            AreaId.main => _logFile == null
-                ? const Intro(
-                    areaId: AreaId.main,
-                  )
-                : LogsGrid(
-                    logFile: _logFile!,
-                    onRecordSelected: _onRecordSelected,
-                  ),
-            AreaId.details => _selectedRecord == null
-                ? const Intro(
-                    areaId: AreaId.details,
-                  )
-                : RecordDetails(record: _selectedRecord!),
-            _ => throw UnimplementedError(),
-          },
+        body: MultiSplitViewTheme(
+          data: MultiSplitViewThemeData(
+            dividerPainter: DividerPainters.grooved1(
+              size: 50,
+              highlightedSize: 150,
+              color: Theme.of(context).primaryColorLight,
+              highlightedColor: Theme.of(context).primaryColor,
+            ),
+          ),
+          child: MultiSplitView(
+            axis: Axis.vertical,
+            controller: _controller,
+            builder: (context, area) => switch (area.data) {
+              AreaId.main => _logFile == null
+                  ? const Intro(
+                      areaId: AreaId.main,
+                    )
+                  : LogsGrid(
+                      logFile: _logFile!,
+                      onRecordSelected: _onRecordSelected,
+                    ),
+              AreaId.details => _selectedRecord == null
+                  ? const Intro(
+                      areaId: AreaId.details,
+                    )
+                  : RecordDetails(record: _selectedRecord!),
+              _ => throw UnimplementedError(),
+            },
+          ),
         ),
       ),
     );
@@ -149,6 +159,7 @@ class _MainPageState extends State<MainPage> {
     final json = jsonDecode(string) as Map<String, Object?>;
     setState(() {
       _logFile = LogFile.fromJson(json);
+      _selectedRecord = null;
     });
     _showMessage('Log file loaded, entries: ${_logFile!.logs.length}');
   }
@@ -161,6 +172,7 @@ class _MainPageState extends State<MainPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
+        duration: const Duration(seconds: 2),
       ),
     );
   }

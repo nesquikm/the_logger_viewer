@@ -109,11 +109,28 @@ class _LogsGridState extends State<LogsGrid> {
     ),
   ];
 
+  List<PlutoRow> _rows = [];
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
+    _updateRows();
+  }
+
+  @override
+  void didUpdateWidget(covariant LogsGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.logFile != oldWidget.logFile) {
+      _updateRows();
+    }
+  }
+
+  void _updateRows() {
     _stateManager?.removeAllRows();
 
-    final rows = widget.logFile.logs
+    _rows = widget.logFile.logs
         .map(
           (record) => PlutoRow(
             cells: {
@@ -122,21 +139,38 @@ class _LogsGridState extends State<LogsGrid> {
               'record_timestamp': PlutoCell(value: record.recordTimestamp),
               'loggerName': PlutoCell(value: record.loggerName),
               'level': PlutoCell(value: record.level),
-              'message': PlutoCell(value: record.message),
-              'error': PlutoCell(value: record.error ?? ''),
+              'message': PlutoCell(
+                value: record.message.replaceAll('\n', ' ').trim(),
+              ),
+              'error': PlutoCell(
+                value: record.error?.replaceAll('\n', ' ').trim() ?? '',
+              ),
             },
           ),
         )
         .toList();
 
-    _stateManager?.appendRows(rows);
+    _stateManager?.appendRows(_rows);
 
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
+    _stateManager?.moveScrollByRow(
+      PlutoMoveDirection.down,
+      _stateManager!.refRows.length,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return PlutoGrid(
       columns: _columns,
-      rows: rows,
+      rows: _rows,
       mode: PlutoGridMode.selectWithOneTap,
       onLoaded: (PlutoGridOnLoadedEvent event) {
         _stateManager = event.stateManager;
+        _scrollToBottom();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         final row = event.row;
