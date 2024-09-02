@@ -182,10 +182,9 @@ mixin _$LogRecord {
   DateTime get recordTimestamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'session_id')
   int get sessionId => throw _privateConstructorUsedError;
-
-  /// should be a LogLevel
   @JsonKey(name: 'level')
-  int get level => throw _privateConstructorUsedError;
+  @LevelSerializer()
+  Level get level => throw _privateConstructorUsedError;
   @JsonKey(name: 'message')
   String get message => throw _privateConstructorUsedError;
   @JsonKey(name: 'error')
@@ -214,7 +213,7 @@ abstract class $LogRecordCopyWith<$Res> {
       @DateTimeSerializer()
       DateTime recordTimestamp,
       @JsonKey(name: 'session_id') int sessionId,
-      @JsonKey(name: 'level') int level,
+      @JsonKey(name: 'level') @LevelSerializer() Level level,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'error') String? error,
       @JsonKey(name: 'stack_trace') String? stackTrace,
@@ -264,7 +263,7 @@ class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
       level: null == level
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Level,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -300,7 +299,7 @@ abstract class _$$LogRecordImplCopyWith<$Res>
       @DateTimeSerializer()
       DateTime recordTimestamp,
       @JsonKey(name: 'session_id') int sessionId,
-      @JsonKey(name: 'level') int level,
+      @JsonKey(name: 'level') @LevelSerializer() Level level,
       @JsonKey(name: 'message') String message,
       @JsonKey(name: 'error') String? error,
       @JsonKey(name: 'stack_trace') String? stackTrace,
@@ -348,7 +347,7 @@ class __$$LogRecordImplCopyWithImpl<$Res>
       level: null == level
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
-              as int,
+              as Level,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -379,7 +378,7 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
       @DateTimeSerializer()
       required this.recordTimestamp,
       @JsonKey(name: 'session_id') required this.sessionId,
-      @JsonKey(name: 'level') required this.level,
+      @JsonKey(name: 'level') @LevelSerializer() required this.level,
       @JsonKey(name: 'message') required this.message,
       @JsonKey(name: 'error') required this.error,
       @JsonKey(name: 'stack_trace') required this.stackTrace,
@@ -401,11 +400,10 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
   @override
   @JsonKey(name: 'session_id')
   final int sessionId;
-
-  /// should be a LogLevel
   @override
   @JsonKey(name: 'level')
-  final int level;
+  @LevelSerializer()
+  final Level level;
   @override
   @JsonKey(name: 'message')
   final String message;
@@ -488,7 +486,7 @@ abstract class _LogRecord implements LogRecord {
       @DateTimeSerializer()
       required final DateTime recordTimestamp,
       @JsonKey(name: 'session_id') required final int sessionId,
-      @JsonKey(name: 'level') required final int level,
+      @JsonKey(name: 'level') @LevelSerializer() required final Level level,
       @JsonKey(name: 'message') required final String message,
       @JsonKey(name: 'error') required final String? error,
       @JsonKey(name: 'stack_trace') required final String? stackTrace,
@@ -513,10 +511,9 @@ abstract class _LogRecord implements LogRecord {
   @JsonKey(name: 'session_id')
   int get sessionId;
   @override
-
-  /// should be a LogLevel
   @JsonKey(name: 'level')
-  int get level;
+  @LevelSerializer()
+  Level get level;
   @override
   @JsonKey(name: 'message')
   String get message;

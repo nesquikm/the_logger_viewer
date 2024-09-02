@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 
 part 'models.freezed.dart';
 part 'models.g.dart';
@@ -28,9 +29,7 @@ sealed class LogRecord with _$LogRecord {
     @DateTimeSerializer()
     required DateTime recordTimestamp,
     @JsonKey(name: 'session_id') required int sessionId,
-
-    /// should be a LogLevel
-    @JsonKey(name: 'level') required int level,
+    @JsonKey(name: 'level') @LevelSerializer() required Level level,
     @JsonKey(name: 'message') required String message,
     @JsonKey(name: 'error') required String? error,
     @JsonKey(name: 'stack_trace') required String? stackTrace,
@@ -65,4 +64,34 @@ class DateTimeSerializer implements JsonConverter<DateTime, String> {
 
   @override
   String toJson(DateTime date) => date.toString();
+}
+
+/// Level serializer.
+class LevelSerializer implements JsonConverter<Level, int> {
+  /// Default constructor.
+  const LevelSerializer();
+
+  static final _log = Logger('LevelSerializer');
+  static final _sorted = [...Level.LEVELS]
+    ..sort((a, b) => a.value.compareTo(b.value));
+
+  @override
+  Level fromJson(int value) {
+    for (final level in _sorted) {
+      if (level.value == value) {
+        return level;
+      }
+
+      if (value < level.value) {
+        _log.warning('Unknown level value: $value, using $level');
+        return level;
+      }
+    }
+
+    _log.warning('Unknown level value: $value, using ${Level.SHOUT}');
+    return Level.SHOUT;
+  }
+
+  @override
+  int toJson(Level level) => level.value;
 }

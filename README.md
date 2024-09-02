@@ -1,16 +1,12 @@
 # the_logger_viewer
 
-A new Flutter project.
+TheLogger viewer is a simple flutter app that allows you to view logs from the_logger package.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To generate source code you need to run the following command:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+dart run build_runner build
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

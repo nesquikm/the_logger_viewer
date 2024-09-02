@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:the_logger_viewer/models.dart';
 
 /// Main application Page
@@ -18,6 +18,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final _log = Logger('_MainPageState');
+
+  LogFile? _logFile;
+
   @override
   Widget build(BuildContext context) {
     return DropTarget(
@@ -50,11 +54,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _dropDone(DropDoneDetails details) async {
     if (details.files.length != 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please drop only one file'),
-        ),
-      );
+      _showError('Please drop only one file');
       return;
     }
 
@@ -64,17 +64,21 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _openFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Open a log file',
-      type: FileType.custom,
-      allowedExtensions: ['bz2'],
-      lockParentWindow: true,
-    );
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        dialogTitle: 'Open a log file',
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        lockParentWindow: true,
+      );
 
-    if (result != null) {
-      await _readFile(result);
-    } else {
-      // User canceled the picker
+      if (result != null) {
+        await _readFile(result);
+      } else {
+        // User canceled the picker
+      }
+    } on Exception catch (e, s) {
+      _showError('Filed to open file', e, s);
     }
   }
 
@@ -92,16 +96,44 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _decodeBytes(Uint8List bytes) async {
-    final decoder = BZip2Decoder();
-    final decodedBytes = decoder.decodeBytes(bytes);
-    final decodedString = utf8.decode(decodedBytes);
+    try {
+      // TODO(nesquikm): bz2 decoder seems to be broken :(
+      // _log.fine('Decoding bytes, length: ${bytes.length}');
+      // final decoder = BZip2Decoder();
+      // final decodedBytes = decoder.decodeBytes(bytes);
+      // _log.fine('Decoded bytes, length: ${decodedBytes.length}');
 
-    await _readJson(decodedString);
+      // final decodedString = utf8.decode(decodedBytes);
+
+      // _log.fine('Decoded string, length: ${decodedString.length}');
+
+      // await _readJson(decodedString);
+
+      // TODO(nesquikm): so let's use unpacked file for now
+      final decodedString = utf8.decode(bytes);
+      await _readJson(decodedString);
+    } on Exception catch (e, s) {
+      _showError('Failed to decode file', e, s);
+    }
   }
 
   Future<void> _readJson(String string) async {
     final json = jsonDecode(string) as Map<String, Object?>;
-    final logFile = LogFile.fromJson(json);
-    print(logFile);
+    _logFile = LogFile.fromJson(json);
+    _log.info('Log file loaded, entries: ${_logFile!.logs.length}');
+    print(_logFile);
+  }
+
+  void _showError(String message, [Object? error, StackTrace? stackTrace]) {
+    _log.severe(message, error, stackTrace);
+    if (!mounted) {
+      _log.warning('Showing error on unmounted widget: $message');
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$message $error'),
+      ),
+    );
   }
 }
