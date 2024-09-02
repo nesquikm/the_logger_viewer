@@ -10,7 +10,7 @@ part 'models.g.dart';
 sealed class LogFile with _$LogFile {
   /// Default constructor.
   const factory LogFile({
-    @JsonKey(name: 'logs') required List<LogRecord> logs,
+    @JsonKey(name: 'logs') required List<LogFileRecord> logs,
   }) = _LogFile;
 
   /// Create a LogFile from JSON.
@@ -20,9 +20,9 @@ sealed class LogFile with _$LogFile {
 
 /// Log record model.
 @freezed
-sealed class LogRecord with _$LogRecord {
+sealed class LogFileRecord with _$LogFileRecord {
   /// Default constructor.
-  const factory LogRecord({
+  const factory LogFileRecord({
     @JsonKey(name: 'logger_name') required String loggerName,
     @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'record_timestamp')
@@ -34,11 +34,11 @@ sealed class LogRecord with _$LogRecord {
     @JsonKey(name: 'error') required String? error,
     @JsonKey(name: 'stack_trace') required String? stackTrace,
     @JsonKey(name: 'time') @TimestampSerializer() required DateTime time,
-  }) = _LogRecord;
+  }) = _LogFileRecord;
 
-  /// Create a LogRecord from JSON.
-  factory LogRecord.fromJson(Map<String, Object?> json) =>
-      _$LogRecordFromJson(json);
+  /// Create a LogFileRecord from JSON.
+  factory LogFileRecord.fromJson(Map<String, Object?> json) =>
+      _$LogFileRecordFromJson(json);
 }
 
 /// Timestamp serializer.

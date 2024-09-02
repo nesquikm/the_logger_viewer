@@ -6,7 +6,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:multi_split_view/multi_split_view.dart';
+import 'package:the_logger_viewer/area_id.dart';
+import 'package:the_logger_viewer/intro.dart';
+import 'package:the_logger_viewer/logs_grid.dart';
 import 'package:the_logger_viewer/models.dart';
+import 'package:the_logger_viewer/record_details.dart';
 
 /// Main application Page
 class MainPage extends StatefulWidget {
@@ -21,6 +26,19 @@ class _MainPageState extends State<MainPage> {
   final _log = Logger('_MainPageState');
 
   LogFile? _logFile;
+  LogFileRecord? _selectedRecord;
+
+  final _controller = MultiSplitViewController(
+    areas: [
+      Area(
+        flex: 4,
+        data: AreaId.main,
+      ),
+      Area(
+        data: AreaId.details,
+      ),
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +56,25 @@ class _MainPageState extends State<MainPage> {
             ),
           ],
         ),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
-            ],
-          ),
+        body: MultiSplitView(
+          axis: Axis.vertical,
+          controller: _controller,
+          builder: (context, area) => switch (area.data) {
+            AreaId.main => _logFile == null
+                ? const Intro(
+                    areaId: AreaId.main,
+                  )
+                : LogsGrid(
+                    logFile: _logFile!,
+                    onRecordSelected: _onRecordSelected,
+                  ),
+            AreaId.details => _selectedRecord == null
+                ? const Intro(
+                    areaId: AreaId.details,
+                  )
+                : RecordDetails(record: _selectedRecord!),
+            _ => throw UnimplementedError(),
+          },
         ),
       ),
     );
@@ -119,21 +147,41 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _readJson(String string) async {
     final json = jsonDecode(string) as Map<String, Object?>;
-    _logFile = LogFile.fromJson(json);
-    _log.info('Log file loaded, entries: ${_logFile!.logs.length}');
-    print(_logFile);
+    setState(() {
+      _logFile = LogFile.fromJson(json);
+    });
+    _showMessage('Log file loaded, entries: ${_logFile!.logs.length}');
   }
 
-  void _showError(String message, [Object? error, StackTrace? stackTrace]) {
-    _log.severe(message, error, stackTrace);
+  void _showSnack(String message) {
     if (!mounted) {
       _log.warning('Showing error on unmounted widget: $message');
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$message $error'),
+        content: Text(message),
       ),
     );
+  }
+
+  void _showMessage(String message) {
+    _log.info(message);
+    _showSnack(message);
+  }
+
+  void _showError(String message, [Object? error, StackTrace? stackTrace]) {
+    _log.severe(message, error, stackTrace);
+    _showSnack('$message $error');
+  }
+
+  void _onRecordSelected(int id) {
+    try {
+      setState(() {
+        _selectedRecord = _logFile!.logs.firstWhere((r) => r.id == id);
+      });
+    } on Exception catch (e, s) {
+      _showError('Filed find record', e, s);
+    }
   }
 }

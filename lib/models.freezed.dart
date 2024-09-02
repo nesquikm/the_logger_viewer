@@ -21,7 +21,7 @@ LogFile _$LogFileFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LogFile {
   @JsonKey(name: 'logs')
-  List<LogRecord> get logs => throw _privateConstructorUsedError;
+  List<LogFileRecord> get logs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -33,7 +33,7 @@ abstract class $LogFileCopyWith<$Res> {
   factory $LogFileCopyWith(LogFile value, $Res Function(LogFile) then) =
       _$LogFileCopyWithImpl<$Res, LogFile>;
   @useResult
-  $Res call({@JsonKey(name: 'logs') List<LogRecord> logs});
+  $Res call({@JsonKey(name: 'logs') List<LogFileRecord> logs});
 }
 
 /// @nodoc
@@ -55,7 +55,7 @@ class _$LogFileCopyWithImpl<$Res, $Val extends LogFile>
       logs: null == logs
           ? _value.logs
           : logs // ignore: cast_nullable_to_non_nullable
-              as List<LogRecord>,
+              as List<LogFileRecord>,
     ) as $Val);
   }
 }
@@ -67,7 +67,7 @@ abstract class _$$LogFileImplCopyWith<$Res> implements $LogFileCopyWith<$Res> {
       __$$LogFileImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@JsonKey(name: 'logs') List<LogRecord> logs});
+  $Res call({@JsonKey(name: 'logs') List<LogFileRecord> logs});
 }
 
 /// @nodoc
@@ -87,7 +87,7 @@ class __$$LogFileImplCopyWithImpl<$Res>
       logs: null == logs
           ? _value._logs
           : logs // ignore: cast_nullable_to_non_nullable
-              as List<LogRecord>,
+              as List<LogFileRecord>,
     ));
   }
 }
@@ -96,16 +96,16 @@ class __$$LogFileImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LogFileImpl with DiagnosticableTreeMixin implements _LogFile {
   const _$LogFileImpl(
-      {@JsonKey(name: 'logs') required final List<LogRecord> logs})
+      {@JsonKey(name: 'logs') required final List<LogFileRecord> logs})
       : _logs = logs;
 
   factory _$LogFileImpl.fromJson(Map<String, dynamic> json) =>
       _$$LogFileImplFromJson(json);
 
-  final List<LogRecord> _logs;
+  final List<LogFileRecord> _logs;
   @override
   @JsonKey(name: 'logs')
-  List<LogRecord> get logs {
+  List<LogFileRecord> get logs {
     if (_logs is EqualUnmodifiableListView) return _logs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_logs);
@@ -153,26 +153,26 @@ class _$LogFileImpl with DiagnosticableTreeMixin implements _LogFile {
 
 abstract class _LogFile implements LogFile {
   const factory _LogFile(
-          {@JsonKey(name: 'logs') required final List<LogRecord> logs}) =
+          {@JsonKey(name: 'logs') required final List<LogFileRecord> logs}) =
       _$LogFileImpl;
 
   factory _LogFile.fromJson(Map<String, dynamic> json) = _$LogFileImpl.fromJson;
 
   @override
   @JsonKey(name: 'logs')
-  List<LogRecord> get logs;
+  List<LogFileRecord> get logs;
   @override
   @JsonKey(ignore: true)
   _$$LogFileImplCopyWith<_$LogFileImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-LogRecord _$LogRecordFromJson(Map<String, dynamic> json) {
-  return _LogRecord.fromJson(json);
+LogFileRecord _$LogFileRecordFromJson(Map<String, dynamic> json) {
+  return _LogFileRecord.fromJson(json);
 }
 
 /// @nodoc
-mixin _$LogRecord {
+mixin _$LogFileRecord {
   @JsonKey(name: 'logger_name')
   String get loggerName => throw _privateConstructorUsedError;
   @JsonKey(name: 'id')
@@ -197,14 +197,15 @@ mixin _$LogRecord {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $LogRecordCopyWith<LogRecord> get copyWith =>
+  $LogFileRecordCopyWith<LogFileRecord> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LogRecordCopyWith<$Res> {
-  factory $LogRecordCopyWith(LogRecord value, $Res Function(LogRecord) then) =
-      _$LogRecordCopyWithImpl<$Res, LogRecord>;
+abstract class $LogFileRecordCopyWith<$Res> {
+  factory $LogFileRecordCopyWith(
+          LogFileRecord value, $Res Function(LogFileRecord) then) =
+      _$LogFileRecordCopyWithImpl<$Res, LogFileRecord>;
   @useResult
   $Res call(
       {@JsonKey(name: 'logger_name') String loggerName,
@@ -221,9 +222,9 @@ abstract class $LogRecordCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
-    implements $LogRecordCopyWith<$Res> {
-  _$LogRecordCopyWithImpl(this._value, this._then);
+class _$LogFileRecordCopyWithImpl<$Res, $Val extends LogFileRecord>
+    implements $LogFileRecordCopyWith<$Res> {
+  _$LogFileRecordCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -285,11 +286,11 @@ class _$LogRecordCopyWithImpl<$Res, $Val extends LogRecord>
 }
 
 /// @nodoc
-abstract class _$$LogRecordImplCopyWith<$Res>
-    implements $LogRecordCopyWith<$Res> {
-  factory _$$LogRecordImplCopyWith(
-          _$LogRecordImpl value, $Res Function(_$LogRecordImpl) then) =
-      __$$LogRecordImplCopyWithImpl<$Res>;
+abstract class _$$LogFileRecordImplCopyWith<$Res>
+    implements $LogFileRecordCopyWith<$Res> {
+  factory _$$LogFileRecordImplCopyWith(
+          _$LogFileRecordImpl value, $Res Function(_$LogFileRecordImpl) then) =
+      __$$LogFileRecordImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -307,11 +308,11 @@ abstract class _$$LogRecordImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$LogRecordImplCopyWithImpl<$Res>
-    extends _$LogRecordCopyWithImpl<$Res, _$LogRecordImpl>
-    implements _$$LogRecordImplCopyWith<$Res> {
-  __$$LogRecordImplCopyWithImpl(
-      _$LogRecordImpl _value, $Res Function(_$LogRecordImpl) _then)
+class __$$LogFileRecordImplCopyWithImpl<$Res>
+    extends _$LogFileRecordCopyWithImpl<$Res, _$LogFileRecordImpl>
+    implements _$$LogFileRecordImplCopyWith<$Res> {
+  __$$LogFileRecordImplCopyWithImpl(
+      _$LogFileRecordImpl _value, $Res Function(_$LogFileRecordImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -327,7 +328,7 @@ class __$$LogRecordImplCopyWithImpl<$Res>
     Object? stackTrace = freezed,
     Object? time = null,
   }) {
-    return _then(_$LogRecordImpl(
+    return _then(_$LogFileRecordImpl(
       loggerName: null == loggerName
           ? _value.loggerName
           : loggerName // ignore: cast_nullable_to_non_nullable
@@ -370,8 +371,10 @@ class __$$LogRecordImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
-  const _$LogRecordImpl(
+class _$LogFileRecordImpl
+    with DiagnosticableTreeMixin
+    implements _LogFileRecord {
+  const _$LogFileRecordImpl(
       {@JsonKey(name: 'logger_name') required this.loggerName,
       @JsonKey(name: 'id') required this.id,
       @JsonKey(name: 'record_timestamp')
@@ -384,8 +387,8 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
       @JsonKey(name: 'stack_trace') required this.stackTrace,
       @JsonKey(name: 'time') @TimestampSerializer() required this.time});
 
-  factory _$LogRecordImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LogRecordImplFromJson(json);
+  factory _$LogFileRecordImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LogFileRecordImplFromJson(json);
 
   @override
   @JsonKey(name: 'logger_name')
@@ -420,14 +423,14 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LogRecord(loggerName: $loggerName, id: $id, recordTimestamp: $recordTimestamp, sessionId: $sessionId, level: $level, message: $message, error: $error, stackTrace: $stackTrace, time: $time)';
+    return 'LogFileRecord(loggerName: $loggerName, id: $id, recordTimestamp: $recordTimestamp, sessionId: $sessionId, level: $level, message: $message, error: $error, stackTrace: $stackTrace, time: $time)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'LogRecord'))
+      ..add(DiagnosticsProperty('type', 'LogFileRecord'))
       ..add(DiagnosticsProperty('loggerName', loggerName))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('recordTimestamp', recordTimestamp))
@@ -443,7 +446,7 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LogRecordImpl &&
+            other is _$LogFileRecordImpl &&
             (identical(other.loggerName, loggerName) ||
                 other.loggerName == loggerName) &&
             (identical(other.id, id) || other.id == id) &&
@@ -467,19 +470,19 @@ class _$LogRecordImpl with DiagnosticableTreeMixin implements _LogRecord {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LogRecordImplCopyWith<_$LogRecordImpl> get copyWith =>
-      __$$LogRecordImplCopyWithImpl<_$LogRecordImpl>(this, _$identity);
+  _$$LogFileRecordImplCopyWith<_$LogFileRecordImpl> get copyWith =>
+      __$$LogFileRecordImplCopyWithImpl<_$LogFileRecordImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LogRecordImplToJson(
+    return _$$LogFileRecordImplToJson(
       this,
     );
   }
 }
 
-abstract class _LogRecord implements LogRecord {
-  const factory _LogRecord(
+abstract class _LogFileRecord implements LogFileRecord {
+  const factory _LogFileRecord(
       {@JsonKey(name: 'logger_name') required final String loggerName,
       @JsonKey(name: 'id') required final int id,
       @JsonKey(name: 'record_timestamp')
@@ -492,10 +495,10 @@ abstract class _LogRecord implements LogRecord {
       @JsonKey(name: 'stack_trace') required final String? stackTrace,
       @JsonKey(name: 'time')
       @TimestampSerializer()
-      required final DateTime time}) = _$LogRecordImpl;
+      required final DateTime time}) = _$LogFileRecordImpl;
 
-  factory _LogRecord.fromJson(Map<String, dynamic> json) =
-      _$LogRecordImpl.fromJson;
+  factory _LogFileRecord.fromJson(Map<String, dynamic> json) =
+      _$LogFileRecordImpl.fromJson;
 
   @override
   @JsonKey(name: 'logger_name')
@@ -529,6 +532,6 @@ abstract class _LogRecord implements LogRecord {
   DateTime get time;
   @override
   @JsonKey(ignore: true)
-  _$$LogRecordImplCopyWith<_$LogRecordImpl> get copyWith =>
+  _$$LogFileRecordImplCopyWith<_$LogFileRecordImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

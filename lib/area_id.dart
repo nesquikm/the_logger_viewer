@@ -1,0 +1,4 @@
+enum AreaId {
+  main,
+  details,
+}

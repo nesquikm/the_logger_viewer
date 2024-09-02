@@ -9,7 +9,7 @@ part of 'models.dart';
 _$LogFileImpl _$$LogFileImplFromJson(Map<String, dynamic> json) =>
     _$LogFileImpl(
       logs: (json['logs'] as List<dynamic>)
-          .map((e) => LogRecord.fromJson(e as Map<String, dynamic>))
+          .map((e) => LogFileRecord.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -18,8 +18,8 @@ Map<String, dynamic> _$$LogFileImplToJson(_$LogFileImpl instance) =>
       'logs': instance.logs,
     };
 
-_$LogRecordImpl _$$LogRecordImplFromJson(Map<String, dynamic> json) =>
-    _$LogRecordImpl(
+_$LogFileRecordImpl _$$LogFileRecordImplFromJson(Map<String, dynamic> json) =>
+    _$LogFileRecordImpl(
       loggerName: json['logger_name'] as String,
       id: (json['id'] as num).toInt(),
       recordTimestamp: const DateTimeSerializer()
@@ -32,7 +32,7 @@ _$LogRecordImpl _$$LogRecordImplFromJson(Map<String, dynamic> json) =>
       time: const TimestampSerializer().fromJson((json['time'] as num).toInt()),
     );
 
-Map<String, dynamic> _$$LogRecordImplToJson(_$LogRecordImpl instance) =>
+Map<String, dynamic> _$$LogFileRecordImplToJson(_$LogFileRecordImpl instance) =>
     <String, dynamic>{
       'logger_name': instance.loggerName,
       'id': instance.id,
