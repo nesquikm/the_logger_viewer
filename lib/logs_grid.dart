@@ -19,12 +19,20 @@ class LogsGrid extends StatefulWidget {
   /// Callback when record is selected.
   final void Function(int id) onRecordSelected;
 
+  @override
+  State<LogsGrid> createState() => _LogsGridState();
+}
+
+class _LogsGridState extends State<LogsGrid> {
+  PlutoGridStateManager? _stateManager;
+
   static final List<PlutoColumn> _columns = <PlutoColumn>[
     PlutoColumn(
       title: 'Session',
       field: 'sessionId',
       readOnly: true,
       enableSorting: false,
+      suppressedAutoSize: true,
       width: 90,
       minWidth: 90,
       type: PlutoColumnType.number(
@@ -35,6 +43,7 @@ class LogsGrid extends StatefulWidget {
       title: 'Id',
       field: 'id',
       readOnly: true,
+      suppressedAutoSize: true,
       width: 90,
       minWidth: 90,
       type: PlutoColumnType.number(
@@ -45,6 +54,7 @@ class LogsGrid extends StatefulWidget {
       title: 'Timestamp',
       field: 'record_timestamp',
       readOnly: true,
+      suppressedAutoSize: true,
       enableSorting: false,
       width: 180,
       minWidth: 100,
@@ -54,6 +64,7 @@ class LogsGrid extends StatefulWidget {
       title: 'Logger name',
       field: 'loggerName',
       readOnly: true,
+      suppressedAutoSize: true,
       enableSorting: false,
       width: 250,
       minWidth: 100,
@@ -63,6 +74,7 @@ class LogsGrid extends StatefulWidget {
       title: 'Level',
       field: 'level',
       readOnly: true,
+      suppressedAutoSize: true,
       enableSorting: false,
       width: 100,
       minWidth: 100,
@@ -98,14 +110,9 @@ class LogsGrid extends StatefulWidget {
   ];
 
   @override
-  State<LogsGrid> createState() => _LogsGridState();
-}
-
-class _LogsGridState extends State<LogsGrid> {
-  late final PlutoGridStateManager _stateManager;
-
-  @override
   Widget build(BuildContext context) {
+    _stateManager?.removeAllRows();
+
     final rows = widget.logFile.logs
         .map(
           (record) => PlutoRow(
@@ -122,8 +129,10 @@ class _LogsGridState extends State<LogsGrid> {
         )
         .toList();
 
+    _stateManager?.appendRows(rows);
+
     return PlutoGrid(
-      columns: LogsGrid._columns,
+      columns: _columns,
       rows: rows,
       mode: PlutoGridMode.selectWithOneTap,
       onLoaded: (PlutoGridOnLoadedEvent event) {
@@ -134,7 +143,11 @@ class _LogsGridState extends State<LogsGrid> {
         final id = row!.cells['id']!.value as int;
         widget.onRecordSelected(id);
       },
-      configuration: const PlutoGridConfiguration(),
+      configuration: const PlutoGridConfiguration(
+        columnSize: PlutoGridColumnSizeConfig(
+          autoSizeMode: PlutoAutoSizeMode.scale,
+        ),
+      ),
       rowColorCallback: (rowColorContext) {
         final level = rowColorContext.row.cells['level']!.value as Level;
         final foregroundColor = level.color.withOpacity(0.4);

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:the_logger_viewer/models.dart';
 
@@ -7,6 +6,7 @@ class RecordDetails extends StatelessWidget {
   /// Default constructor.
   const RecordDetails({required this.record, super.key});
 
+  /// LogFile record.
   final LogFileRecord record;
 
   @override
