@@ -34,6 +34,8 @@ class _LogsGridState extends State<LogsGrid> {
 
   final levelFilderController = MultiSelectController<Level>();
 
+  LogFileRecord? _selectedRecord;
+
   @override
   void initState() {
     super.initState();
@@ -160,15 +162,16 @@ class _LogsGridState extends State<LogsGrid> {
 
     _stateManager?.appendRows(_rows);
 
-    _scrollToBottom();
+    // _scrollToBottom();
+    // _toLastSession();
   }
 
-  void _scrollToBottom() {
-    _stateManager?.moveScrollByRow(
-      PlutoMoveDirection.down,
-      _stateManager!.refRows.length,
-    );
-  }
+  // void _scrollToBottom() {
+  //   _stateManager?.moveScrollByRow(
+  //     PlutoMoveDirection.down,
+  //     _stateManager!.refRows.length,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -183,12 +186,13 @@ class _LogsGridState extends State<LogsGrid> {
           _levelFilterCheck();
         });
         // _levelFilterCheck();
-        _scrollToBottom();
+        // _scrollToBottom();
+        // _toLastSession();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         final row = event.row;
         final record = row!.data as LogFileRecord;
-        widget.controller.onRecordSelected(record);
+        _selectRecord(record);
       },
       configuration: PlutoGridConfiguration(
         columnSize: const PlutoGridColumnSizeConfig(
@@ -197,13 +201,8 @@ class _LogsGridState extends State<LogsGrid> {
         columnFilter: PlutoGridColumnFilterConfig(
           filters: [
             ...FilterHelper.defaultFilters,
-            // LevelFilter(),
           ],
           resolveDefaultColumnFilter: (column, resolver) {
-            // switch (column.field) {
-            //   case 'level':
-            //     return resolver<LevelFilter>() as PlutoFilterType;
-            // }
             return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
           },
         ),
@@ -317,13 +316,56 @@ class _LogsGridState extends State<LogsGrid> {
     );
   }
 
-  void _toFirstSession() {}
+  void _toFirstSession() {
+    final firstRow = _stateManager!.refRows.first;
+    final firstRecord = firstRow.data as LogFileRecord;
+
+    _stateManager?.moveScrollByRow(
+      PlutoMoveDirection.up,
+      0,
+    );
+
+    _selectRecord(firstRecord);
+  }
 
   void _toPrevSession() {}
 
   void _toNextSession() {}
 
-  void _toLastSession() {}
+  void _toLastSession() {
+    final lastRow = _stateManager!.refRows.last;
+    final lastRecord = lastRow.data as LogFileRecord;
+
+    var firstRecordOfLastSessionIndex = _stateManager!.refRows.length - 1;
+    var firstRecordOfLastSession =
+        _getRecordByIndex(firstRecordOfLastSessionIndex);
+
+    for (var i = _stateManager!.refRows.length - 1; i >= 0; i--) {
+      final record = _getRecordByIndex(i);
+      if (record.sessionId != lastRecord.sessionId) {
+        break;
+      }
+      firstRecordOfLastSessionIndex = i;
+      firstRecordOfLastSession = record;
+    }
+
+    _stateManager?.moveScrollByRow(
+      PlutoMoveDirection.down,
+      firstRecordOfLastSessionIndex,
+    );
+
+    _selectRecord(firstRecordOfLastSession);
+  }
+
+  LogFileRecord _getRecordByIndex(int index) {
+    final row = _stateManager!.refRows[index];
+    return row.data as LogFileRecord;
+  }
+
+  void _selectRecord(LogFileRecord record) {
+    _selectedRecord = record;
+    widget.controller.onRecordSelected(record);
+  }
 }
 
 /// Level filter.

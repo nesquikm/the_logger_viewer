@@ -62,22 +62,22 @@ class _MainPageState extends State<MainPage> {
             IconButton(
               icon: const Icon(Icons.first_page),
               tooltip: 'Previous session',
-              onPressed: _onFirstSession,
+              onPressed: _logsGridController.toFirstSession,
             ),
             IconButton(
               icon: const Icon(Icons.skip_previous),
               tooltip: 'Previous session',
-              onPressed: _onPreviousSession,
+              onPressed: _logsGridController.toPrevSession,
             ),
             IconButton(
               icon: const Icon(Icons.skip_next),
               tooltip: 'Next session',
-              onPressed: _onNextSession,
+              onPressed: _logsGridController.toNextSession,
             ),
             IconButton(
               icon: const Icon(Icons.last_page),
-              tooltip: 'Next session',
-              onPressed: _onLastSession,
+              tooltip: 'Last session',
+              onPressed: _logsGridController.toLastSession,
             ),
             IconButton(
               icon: const Icon(Icons.file_open),
@@ -222,12 +222,4 @@ class _MainPageState extends State<MainPage> {
       _selectedRecord = record;
     });
   }
-
-  void _onFirstSession() {}
-
-  void _onPreviousSession() {}
-
-  void _onNextSession() {}
-
-  void _onLastSession() {}
 }
