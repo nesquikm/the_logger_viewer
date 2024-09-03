@@ -61,7 +61,7 @@ class _MainPageState extends State<MainPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.first_page),
-              tooltip: 'Previous session',
+              tooltip: 'First session',
               onPressed: _logsGridController.toFirstSession,
             ),
             IconButton(

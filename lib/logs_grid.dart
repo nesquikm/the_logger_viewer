@@ -43,10 +43,10 @@ class _LogsGridState extends State<LogsGrid> {
     _initColumns();
     _updateRows();
 
-    widget.controller.toFirstSession = _toFirstSession;
-    widget.controller.toPrevSession = _toPrevSession;
-    widget.controller.toNextSession = _toNextSession;
-    widget.controller.toLastSession = _toLastSession;
+    widget.controller._onToFirstSession = _toFirstSession;
+    widget.controller._onToPrevSession = _toPrevSession;
+    widget.controller._onToNextSession = _toNextSession;
+    widget.controller._onToLastSession = _toLastSession;
   }
 
   @override
@@ -184,10 +184,10 @@ class _LogsGridState extends State<LogsGrid> {
         event.stateManager.setShowColumnFilter(true);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _levelFilterCheck();
+          // _toLastSession();
         });
         // _levelFilterCheck();
         // _scrollToBottom();
-        // _toLastSession();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         final row = event.row;
@@ -400,26 +400,34 @@ class LogsGridController {
   /// Default constructor.
   LogsGridController({
     required this.onRecordSelected,
-    this.toFirstSession = _emptyFunction,
-    this.toPrevSession = _emptyFunction,
-    this.toNextSession = _emptyFunction,
-    this.toLastSession = _emptyFunction,
   });
 
   /// Callback when record is selected.
   final void Function(LogFileRecord record) onRecordSelected;
 
   /// Go to the first session.
-  void Function() toFirstSession;
+  void toFirstSession() => _onToFirstSession();
 
   /// Go to the previous session.
-  void Function() toPrevSession;
+  void toPrevSession() => _onToPrevSession();
 
   /// Go to the next session.
-  void Function() toNextSession;
+  void toNextSession() => _onToNextSession();
 
   /// Go to the last session.
-  void Function() toLastSession;
+  void toLastSession() => _onToLastSession();
+
+  /// Go to the first session callback.
+  void Function() _onToFirstSession = _emptyFunction;
+
+  /// Go to the previous session callback.
+  void Function() _onToPrevSession = _emptyFunction;
+
+  /// Go to the next session callback.
+  void Function() _onToNextSession = _emptyFunction;
+
+  /// Go to the last session callback.
+  void Function() _onToLastSession = _emptyFunction;
 
   static void _emptyFunction() {}
 }
