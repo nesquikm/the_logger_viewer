@@ -95,3 +95,16 @@ class LevelSerializer implements JsonConverter<Level, int> {
   @override
   int toJson(Level level) => level.value;
 }
+
+/// Log record levels model.
+@freezed
+sealed class LogFileRecordLevels with _$LogFileRecordLevels {
+  /// Default constructor.
+  const factory LogFileRecordLevels({
+    @JsonKey(name: 'levels') @LevelSerializer() required List<Level> levels,
+  }) = _LogFileRecordLevels;
+
+  /// Create a LogFileRecordLevels from JSON.
+  factory LogFileRecordLevels.fromJson(Map<String, Object?> json) =>
+      _$LogFileRecordLevelsFromJson(json);
+}

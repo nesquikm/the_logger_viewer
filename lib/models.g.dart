@@ -45,3 +45,17 @@ Map<String, dynamic> _$$LogFileRecordImplToJson(_$LogFileRecordImpl instance) =>
       'stack_trace': instance.stackTrace,
       'time': const TimestampSerializer().toJson(instance.time),
     };
+
+_$LogFileRecordLevelsImpl _$$LogFileRecordLevelsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LogFileRecordLevelsImpl(
+      levels: (json['levels'] as List<dynamic>)
+          .map((e) => const LevelSerializer().fromJson((e as num).toInt()))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$LogFileRecordLevelsImplToJson(
+        _$LogFileRecordLevelsImpl instance) =>
+    <String, dynamic>{
+      'levels': instance.levels.map(const LevelSerializer().toJson).toList(),
+    };

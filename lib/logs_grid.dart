@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
@@ -26,95 +29,16 @@ class LogsGrid extends StatefulWidget {
 class _LogsGridState extends State<LogsGrid> {
   PlutoGridStateManager? _stateManager;
 
-  static final List<PlutoColumn> _columns = <PlutoColumn>[
-    PlutoColumn(
-      title: 'Session',
-      field: 'sessionId',
-      readOnly: true,
-      enableSorting: false,
-      suppressedAutoSize: true,
-      width: 90,
-      minWidth: 90,
-      type: PlutoColumnType.number(
-        format: '###',
-      ),
-    ),
-    PlutoColumn(
-      title: 'Id',
-      field: 'id',
-      readOnly: true,
-      suppressedAutoSize: true,
-      width: 90,
-      minWidth: 90,
-      type: PlutoColumnType.number(
-        format: '###',
-      ),
-    ),
-    PlutoColumn(
-      title: 'Timestamp',
-      field: 'record_timestamp',
-      readOnly: true,
-      suppressedAutoSize: true,
-      enableSorting: false,
-      width: 180,
-      minWidth: 100,
-      type: PlutoColumnType.date(format: 'yyyy-MM-dd HH:mm:ss'),
-    ),
-    PlutoColumn(
-      title: 'Logger name',
-      field: 'loggerName',
-      readOnly: true,
-      suppressedAutoSize: true,
-      enableSorting: false,
-      width: 250,
-      minWidth: 100,
-      type: PlutoColumnType.text(),
-    ),
-    PlutoColumn(
-      title: 'Level',
-      field: 'level',
-      readOnly: true,
-      suppressedAutoSize: true,
-      enableSorting: false,
-      width: 100,
-      minWidth: 100,
-      type: PlutoColumnType.select(Level.LEVELS),
-      renderer: (rendererContext) {
-        final level = rendererContext.cell.value as Level;
-        return Text(
-          level.name.toLowerCase(),
-          style: TextStyle(
-            color: level.color,
-          ),
-        );
-      },
-    ),
-    PlutoColumn(
-      title: 'Message',
-      field: 'message',
-      readOnly: true,
-      enableSorting: false,
-      width: 250,
-      minWidth: 100,
-      type: PlutoColumnType.text(),
-    ),
-    PlutoColumn(
-      title: 'Error',
-      field: 'error',
-      readOnly: true,
-      enableSorting: false,
-      width: 250,
-      minWidth: 100,
-      type: PlutoColumnType.text(),
-    ),
-  ];
-
+  late final List<PlutoColumn> _columns;
   List<PlutoRow<LogFileRecord>> _rows = [];
+
+  final levelFilderController = MultiSelectController<Level>();
 
   @override
   void initState() {
     super.initState();
 
+    _initColumns();
     _updateRows();
   }
 
@@ -125,6 +49,84 @@ class _LogsGridState extends State<LogsGrid> {
     if (widget.logFile != oldWidget.logFile) {
       _updateRows();
     }
+  }
+
+  void _initColumns() {
+    _columns = <PlutoColumn>[
+      PlutoColumn(
+        title: 'Session',
+        field: 'sessionId',
+        readOnly: true,
+        enableSorting: false,
+        suppressedAutoSize: true,
+        width: 90,
+        minWidth: 90,
+        type: PlutoColumnType.number(
+          format: '###',
+        ),
+      ),
+      PlutoColumn(
+        title: 'Id',
+        field: 'id',
+        readOnly: true,
+        suppressedAutoSize: true,
+        width: 90,
+        minWidth: 90,
+        type: PlutoColumnType.number(
+          format: '###',
+        ),
+      ),
+      PlutoColumn(
+        title: 'Timestamp',
+        field: 'record_timestamp',
+        readOnly: true,
+        suppressedAutoSize: true,
+        enableSorting: false,
+        width: 180,
+        minWidth: 100,
+        type: PlutoColumnType.date(format: 'yyyy-MM-dd HH:mm:ss'),
+      ),
+      PlutoColumn(
+        title: 'Logger name',
+        field: 'loggerName',
+        readOnly: true,
+        suppressedAutoSize: true,
+        enableSorting: false,
+        width: 250,
+        minWidth: 100,
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'Level',
+        field: 'level',
+        readOnly: true,
+        suppressedAutoSize: true,
+        enableSorting: false,
+        width: 130,
+        minWidth: 130,
+        type: PlutoColumnType.select(Level.LEVELS),
+        renderer: _levelColumnRenderer,
+        filterWidget: _levelColumnWidget(),
+      ),
+      PlutoColumn(
+        title: 'Message',
+        field: 'message',
+        readOnly: true,
+        enableSorting: false,
+        width: 250,
+        minWidth: 100,
+        type: PlutoColumnType.text(),
+      ),
+      PlutoColumn(
+        title: 'Error',
+        field: 'error',
+        readOnly: true,
+        enableSorting: false,
+        width: 250,
+        minWidth: 100,
+        type: PlutoColumnType.text(),
+      ),
+    ];
   }
 
   void _updateRows() {
@@ -172,6 +174,10 @@ class _LogsGridState extends State<LogsGrid> {
       onLoaded: (PlutoGridOnLoadedEvent event) {
         _stateManager = event.stateManager;
         event.stateManager.setShowColumnFilter(true);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _levelFilterCheck();
+        });
+        // _levelFilterCheck();
         _scrollToBottom();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
@@ -186,7 +192,7 @@ class _LogsGridState extends State<LogsGrid> {
         columnFilter: PlutoGridColumnFilterConfig(
           filters: [
             ...FilterHelper.defaultFilters,
-            LevelFilter(),
+            // LevelFilter(),
           ],
           resolveDefaultColumnFilter: (column, resolver) {
             // switch (column.field) {
@@ -207,6 +213,104 @@ class _LogsGridState extends State<LogsGrid> {
       },
     );
   }
+
+  Widget _levelColumnRenderer(PlutoColumnRendererContext rendererContext) {
+    {
+      final level = rendererContext.cell.value as Level;
+      return Text(
+        level.name.toLowerCase(),
+        style: TextStyle(
+          color: level.color,
+        ),
+      );
+    }
+  }
+
+  List<Level> _prevLevelsFilter = [];
+
+  void _levelFilterCheck() {
+    List<PlutoRow<dynamic>> rows;
+    final foundFilterRows = _stateManager!.filterRowsByField('level');
+
+    final filteredValues =
+        levelFilderController.selectedItems.map((i) => i.value).toList();
+
+    if (filteredValues.contains(Level.ALL) && filteredValues.length > 1) {
+      if (_prevLevelsFilter.contains(Level.ALL)) {
+        filteredValues.removeWhere((l) => l == Level.ALL);
+      } else {
+        filteredValues.removeWhere((l) => l != Level.ALL);
+      }
+
+      levelFilderController
+          .unselectWhere((item) => !filteredValues.contains(item.value));
+    } else if (filteredValues.isEmpty) {
+      filteredValues.add(Level.ALL);
+      levelFilderController.selectWhere((item) => item.value == Level.ALL);
+    }
+
+    _prevLevelsFilter = filteredValues;
+
+    final filteredLevelsJson =
+        jsonEncode(LogFileRecordLevels(levels: filteredValues).toJson());
+
+    if (foundFilterRows.isEmpty) {
+      rows = [
+        ..._stateManager!.filterRows,
+        FilterHelper.createFilterRow(
+          columnField: 'level',
+          filterType: LevelFilter(),
+          filterValue: filteredLevelsJson,
+        ),
+      ];
+    } else {
+      foundFilterRows.first.cells[FilterHelper.filterFieldValue]!.value =
+          filteredLevelsJson;
+      rows = _stateManager!.filterRows;
+    }
+
+    _stateManager!.setFilterWithFilterRows(rows);
+  }
+
+  Widget _levelColumnWidget() {
+    return MultiDropdown<Level>(
+      controller: levelFilderController,
+      fieldDecoration: const FieldDecoration(
+        borderRadius: 0,
+        border: InputBorder.none,
+        padding: EdgeInsets.all(4),
+        showClearIcon: false,
+        hintStyle: TextStyle(
+          fontSize: 14,
+        ),
+      ),
+      chipDecoration: const ChipDecoration(
+        padding: EdgeInsets.all(4),
+        borderRadius: BorderRadius.all(Radius.circular(2)),
+        spacing: 2,
+        wrap: false,
+        labelStyle: TextStyle(
+          fontSize: 12,
+        ),
+        deleteIcon: Icon(
+          Icons.close,
+          size: 6,
+        ),
+      ),
+      items: Level.LEVELS
+          .where((l) => l != Level.OFF)
+          .map(
+            (level) => DropdownItem(
+              label: level.name.toLowerCase(),
+              value: level,
+            ),
+          )
+          .toList(),
+      onSelectionChange: (values) {
+        _levelFilterCheck();
+      },
+    );
+  }
 }
 
 /// Level filter.
@@ -220,8 +324,18 @@ class LevelFilter extends PlutoFilterType {
         required String? search,
         required PlutoColumn column,
       }) {
-        final searchLevel = LevelExtensions.fromString(search ?? '');
+        final levels = search != null
+            ? LogFileRecordLevels.fromJson(
+                jsonDecode(search) as Map<String, Object?>,
+              )
+            : const LogFileRecordLevels(levels: [Level.ALL]);
 
-        return true;
+        if (levels.levels.contains(Level.ALL)) {
+          return true;
+        }
+
+        final baseLevel = LevelExtensions.fromString(base ?? '');
+
+        return levels.levels.contains(baseLevel);
       };
 }

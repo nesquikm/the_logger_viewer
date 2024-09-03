@@ -535,3 +535,169 @@ abstract class _LogFileRecord implements LogFileRecord {
   _$$LogFileRecordImplCopyWith<_$LogFileRecordImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+LogFileRecordLevels _$LogFileRecordLevelsFromJson(Map<String, dynamic> json) {
+  return _LogFileRecordLevels.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LogFileRecordLevels {
+  @JsonKey(name: 'levels')
+  @LevelSerializer()
+  List<Level> get levels => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LogFileRecordLevelsCopyWith<LogFileRecordLevels> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LogFileRecordLevelsCopyWith<$Res> {
+  factory $LogFileRecordLevelsCopyWith(
+          LogFileRecordLevels value, $Res Function(LogFileRecordLevels) then) =
+      _$LogFileRecordLevelsCopyWithImpl<$Res, LogFileRecordLevels>;
+  @useResult
+  $Res call({@JsonKey(name: 'levels') @LevelSerializer() List<Level> levels});
+}
+
+/// @nodoc
+class _$LogFileRecordLevelsCopyWithImpl<$Res, $Val extends LogFileRecordLevels>
+    implements $LogFileRecordLevelsCopyWith<$Res> {
+  _$LogFileRecordLevelsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? levels = null,
+  }) {
+    return _then(_value.copyWith(
+      levels: null == levels
+          ? _value.levels
+          : levels // ignore: cast_nullable_to_non_nullable
+              as List<Level>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LogFileRecordLevelsImplCopyWith<$Res>
+    implements $LogFileRecordLevelsCopyWith<$Res> {
+  factory _$$LogFileRecordLevelsImplCopyWith(_$LogFileRecordLevelsImpl value,
+          $Res Function(_$LogFileRecordLevelsImpl) then) =
+      __$$LogFileRecordLevelsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: 'levels') @LevelSerializer() List<Level> levels});
+}
+
+/// @nodoc
+class __$$LogFileRecordLevelsImplCopyWithImpl<$Res>
+    extends _$LogFileRecordLevelsCopyWithImpl<$Res, _$LogFileRecordLevelsImpl>
+    implements _$$LogFileRecordLevelsImplCopyWith<$Res> {
+  __$$LogFileRecordLevelsImplCopyWithImpl(_$LogFileRecordLevelsImpl _value,
+      $Res Function(_$LogFileRecordLevelsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? levels = null,
+  }) {
+    return _then(_$LogFileRecordLevelsImpl(
+      levels: null == levels
+          ? _value._levels
+          : levels // ignore: cast_nullable_to_non_nullable
+              as List<Level>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$LogFileRecordLevelsImpl
+    with DiagnosticableTreeMixin
+    implements _LogFileRecordLevels {
+  const _$LogFileRecordLevelsImpl(
+      {@JsonKey(name: 'levels')
+      @LevelSerializer()
+      required final List<Level> levels})
+      : _levels = levels;
+
+  factory _$LogFileRecordLevelsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LogFileRecordLevelsImplFromJson(json);
+
+  final List<Level> _levels;
+  @override
+  @JsonKey(name: 'levels')
+  @LevelSerializer()
+  List<Level> get levels {
+    if (_levels is EqualUnmodifiableListView) return _levels;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_levels);
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'LogFileRecordLevels(levels: $levels)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'LogFileRecordLevels'))
+      ..add(DiagnosticsProperty('levels', levels));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LogFileRecordLevelsImpl &&
+            const DeepCollectionEquality().equals(other._levels, _levels));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_levels));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LogFileRecordLevelsImplCopyWith<_$LogFileRecordLevelsImpl> get copyWith =>
+      __$$LogFileRecordLevelsImplCopyWithImpl<_$LogFileRecordLevelsImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LogFileRecordLevelsImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LogFileRecordLevels implements LogFileRecordLevels {
+  const factory _LogFileRecordLevels(
+      {@JsonKey(name: 'levels')
+      @LevelSerializer()
+      required final List<Level> levels}) = _$LogFileRecordLevelsImpl;
+
+  factory _LogFileRecordLevels.fromJson(Map<String, dynamic> json) =
+      _$LogFileRecordLevelsImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'levels')
+  @LevelSerializer()
+  List<Level> get levels;
+  @override
+  @JsonKey(ignore: true)
+  _$$LogFileRecordLevelsImplCopyWith<_$LogFileRecordLevelsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
