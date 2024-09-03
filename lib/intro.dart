@@ -13,7 +13,7 @@ class Intro extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = switch (areaId) {
       AreaId.main => 'Drop logfile here',
-      AreaId.details => 'Here will be details',
+      AreaId.details => 'Tap on record to see details',
     };
     return Center(
       child: Text(text),
