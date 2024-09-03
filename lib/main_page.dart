@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
   LogFile? _logFile;
   LogFileRecord? _selectedRecord;
 
-  final _controller = MultiSplitViewController(
+  final _multiSplitViewcontroller = MultiSplitViewController(
     areas: [
       Area(
         flex: 4,
@@ -40,6 +40,16 @@ class _MainPageState extends State<MainPage> {
     ],
   );
 
+  late final LogsGridController _logsGridController;
+
+  @override
+  void initState() {
+    super.initState();
+    _logsGridController = LogsGridController(
+      onRecordSelected: _onRecordSelected,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DropTarget(
@@ -50,9 +60,29 @@ class _MainPageState extends State<MainPage> {
           title: const Text('TheLogger viewer'),
           actions: [
             IconButton(
+              icon: const Icon(Icons.first_page),
+              tooltip: 'Previous session',
+              onPressed: _onFirstSession,
+            ),
+            IconButton(
+              icon: const Icon(Icons.skip_previous),
+              tooltip: 'Previous session',
+              onPressed: _onPreviousSession,
+            ),
+            IconButton(
+              icon: const Icon(Icons.skip_next),
+              tooltip: 'Next session',
+              onPressed: _onNextSession,
+            ),
+            IconButton(
+              icon: const Icon(Icons.last_page),
+              tooltip: 'Next session',
+              onPressed: _onLastSession,
+            ),
+            IconButton(
               icon: const Icon(Icons.file_open),
               tooltip: 'Open file',
-              onPressed: _openFile,
+              onPressed: _onOpenFile,
             ),
           ],
         ),
@@ -67,7 +97,7 @@ class _MainPageState extends State<MainPage> {
           ),
           child: MultiSplitView(
             axis: Axis.vertical,
-            controller: _controller,
+            controller: _multiSplitViewcontroller,
             builder: (context, area) => switch (area.data) {
               AreaId.main => _logFile == null
                   ? const Intro(
@@ -75,7 +105,7 @@ class _MainPageState extends State<MainPage> {
                     )
                   : LogsGrid(
                       logFile: _logFile!,
-                      onRecordSelected: _onRecordSelected,
+                      controller: _logsGridController,
                     ),
               AreaId.details => _selectedRecord == null
                   ? const Intro(
@@ -101,7 +131,7 @@ class _MainPageState extends State<MainPage> {
     await _decodeBytes(bytes);
   }
 
-  Future<void> _openFile() async {
+  Future<void> _onOpenFile() async {
     try {
       final result = await FilePicker.platform.pickFiles(
         dialogTitle: 'Open a log file',
@@ -187,13 +217,17 @@ class _MainPageState extends State<MainPage> {
     _showSnack('$message $error');
   }
 
-  void _onRecordSelected(int id) {
-    try {
-      setState(() {
-        _selectedRecord = _logFile!.logs.firstWhere((r) => r.id == id);
-      });
-    } on Exception catch (e, s) {
-      _showError('Filed find record', e, s);
-    }
+  void _onRecordSelected(LogFileRecord record) {
+    setState(() {
+      _selectedRecord = record;
+    });
   }
+
+  void _onFirstSession() {}
+
+  void _onPreviousSession() {}
+
+  void _onNextSession() {}
+
+  void _onLastSession() {}
 }

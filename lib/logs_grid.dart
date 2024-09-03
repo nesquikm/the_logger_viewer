@@ -12,15 +12,15 @@ class LogsGrid extends StatefulWidget {
   /// Default constructor.
   const LogsGrid({
     required this.logFile,
-    required this.onRecordSelected,
+    required this.controller,
     super.key,
   });
 
   /// Log file to display.
   final LogFile logFile;
 
-  /// Callback when record is selected.
-  final void Function(int id) onRecordSelected;
+  /// Logs grid controller.
+  final LogsGridController controller;
 
   @override
   State<LogsGrid> createState() => _LogsGridState();
@@ -40,6 +40,11 @@ class _LogsGridState extends State<LogsGrid> {
 
     _initColumns();
     _updateRows();
+
+    widget.controller.toFirstSession = _toFirstSession;
+    widget.controller.toPrevSession = _toPrevSession;
+    widget.controller.toNextSession = _toNextSession;
+    widget.controller.toLastSession = _toLastSession;
   }
 
   @override
@@ -183,7 +188,7 @@ class _LogsGridState extends State<LogsGrid> {
       onSelected: (PlutoGridOnSelectedEvent event) {
         final row = event.row;
         final record = row!.data as LogFileRecord;
-        widget.onRecordSelected(record.id);
+        widget.controller.onRecordSelected(record);
       },
       configuration: PlutoGridConfiguration(
         columnSize: const PlutoGridColumnSizeConfig(
@@ -311,12 +316,20 @@ class _LogsGridState extends State<LogsGrid> {
       },
     );
   }
+
+  void _toFirstSession() {}
+
+  void _toPrevSession() {}
+
+  void _toNextSession() {}
+
+  void _toLastSession() {}
 }
 
 /// Level filter.
 class LevelFilter extends PlutoFilterType {
   @override
-  String get title => '=>';
+  String get title => 'Level';
 
   @override
   PlutoCompareFunction get compare => ({
@@ -338,4 +351,33 @@ class LevelFilter extends PlutoFilterType {
 
         return levels.levels.contains(baseLevel);
       };
+}
+
+/// Logs grid controller.
+class LogsGridController {
+  /// Default constructor.
+  LogsGridController({
+    required this.onRecordSelected,
+    this.toFirstSession = _emptyFunction,
+    this.toPrevSession = _emptyFunction,
+    this.toNextSession = _emptyFunction,
+    this.toLastSession = _emptyFunction,
+  });
+
+  /// Callback when record is selected.
+  final void Function(LogFileRecord record) onRecordSelected;
+
+  /// Go to the first session.
+  void Function() toFirstSession;
+
+  /// Go to the previous session.
+  void Function() toPrevSession;
+
+  /// Go to the next session.
+  void Function() toNextSession;
+
+  /// Go to the last session.
+  void Function() toLastSession;
+
+  static void _emptyFunction() {}
 }

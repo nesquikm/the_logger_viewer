@@ -28,16 +28,40 @@ class RecordDetails extends StatelessWidget {
                   1: FlexColumnWidth(),
                 },
                 children: [
-                  _row('Session id', record.sessionId.toString()),
-                  _row('Id', record.id.toString()),
-                  _row('Timestamp',
-                      '${record.recordTimestamp} (${record.time})'),
-                  _row('Logger name', record.loggerName),
-                  _row('Level', record.level.name.toLowerCase()),
-                  _row('Message', record.message),
-                  if (record.error != null) _row('Error', record.error!),
+                  _row(
+                    'Session id',
+                    record.sessionId.toString(),
+                  ),
+                  _row(
+                    'Id',
+                    record.id.toString(),
+                  ),
+                  _row(
+                    'Timestamp',
+                    '${record.recordTimestamp} (${record.time})',
+                  ),
+                  _row(
+                    'Logger name',
+                    record.loggerName,
+                  ),
+                  _row(
+                    'Level',
+                    record.level.name.toLowerCase(),
+                  ),
+                  _row(
+                    'Message',
+                    record.message,
+                  ),
+                  if (record.error != null)
+                    _row(
+                      'Error',
+                      record.error!,
+                    ),
                   if (record.stackTrace != null)
-                    _row('Stack trace', record.stackTrace!),
+                    _row(
+                      'Stack trace',
+                      record.stackTrace!,
+                    ),
                 ],
               ),
             ),
