@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-import 'package:the_logger_viewer/colors.dart';
+import 'package:pluto_grid_plus/pluto_grid_plus.dart';
+import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
 
 /// Logs grid widget.
@@ -109,7 +109,7 @@ class _LogsGridState extends State<LogsGrid> {
     ),
   ];
 
-  List<PlutoRow> _rows = [];
+  List<PlutoRow<LogFileRecord>> _rows = [];
 
   @override
   void initState() {
@@ -132,7 +132,8 @@ class _LogsGridState extends State<LogsGrid> {
 
     _rows = widget.logFile.logs
         .map(
-          (record) => PlutoRow(
+          (record) => PlutoRow<LogFileRecord>(
+            data: record,
             cells: {
               'sessionId': PlutoCell(value: record.sessionId),
               'id': PlutoCell(value: record.id),
@@ -170,21 +171,35 @@ class _LogsGridState extends State<LogsGrid> {
       mode: PlutoGridMode.selectWithOneTap,
       onLoaded: (PlutoGridOnLoadedEvent event) {
         _stateManager = event.stateManager;
+        event.stateManager.setShowColumnFilter(true);
         _scrollToBottom();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
         final row = event.row;
-        final id = row!.cells['id']!.value as int;
-        widget.onRecordSelected(id);
+        final record = row!.data as LogFileRecord;
+        widget.onRecordSelected(record.id);
       },
-      configuration: const PlutoGridConfiguration(
-        columnSize: PlutoGridColumnSizeConfig(
+      configuration: PlutoGridConfiguration(
+        columnSize: const PlutoGridColumnSizeConfig(
           autoSizeMode: PlutoAutoSizeMode.scale,
+        ),
+        columnFilter: PlutoGridColumnFilterConfig(
+          filters: [
+            ...FilterHelper.defaultFilters,
+            LevelFilter(),
+          ],
+          resolveDefaultColumnFilter: (column, resolver) {
+            // switch (column.field) {
+            //   case 'level':
+            //     return resolver<LevelFilter>() as PlutoFilterType;
+            // }
+            return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+          },
         ),
       ),
       rowColorCallback: (rowColorContext) {
-        final level = rowColorContext.row.cells['level']!.value as Level;
-        final foregroundColor = level.color.withOpacity(0.4);
+        final record = rowColorContext.row.data as LogFileRecord;
+        final foregroundColor = record.level.color.withOpacity(0.4);
         final backgroundColor = rowColorContext.rowIdx.isEven
             ? Colors.transparent
             : Colors.grey.withOpacity(0.1);
@@ -192,4 +207,21 @@ class _LogsGridState extends State<LogsGrid> {
       },
     );
   }
+}
+
+/// Level filter.
+class LevelFilter extends PlutoFilterType {
+  @override
+  String get title => '=>';
+
+  @override
+  PlutoCompareFunction get compare => ({
+        required String? base,
+        required String? search,
+        required PlutoColumn column,
+      }) {
+        final searchLevel = LevelExtensions.fromString(search ?? '');
+
+        return true;
+      };
 }
