@@ -1,0 +1,13 @@
+name: Get flutter
+description: Get flutter
+
+runs:
+  using: "composite"
+  steps:
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.22.3'
+        channel: 'stable'
+        cache: true
+        cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
