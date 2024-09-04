@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
@@ -95,12 +93,9 @@ class RecordDetails extends StatelessWidget {
   }
 
   void _onCopy() {
-    final encoder = JsonEncoder.withIndent(' ' * 2);
-    final encoded = encoder.convert(record.toJson());
-
     Clipboard.setData(
       ClipboardData(
-        text: encoded,
+        text: record.toFormattedString(),
       ),
     );
   }

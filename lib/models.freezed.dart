@@ -371,9 +371,7 @@ class __$$LogFileRecordImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$LogFileRecordImpl
-    with DiagnosticableTreeMixin
-    implements _LogFileRecord {
+class _$LogFileRecordImpl extends _LogFileRecord with DiagnosticableTreeMixin {
   const _$LogFileRecordImpl(
       {@JsonKey(name: 'logger_name') required this.loggerName,
       @JsonKey(name: 'id') required this.id,
@@ -385,7 +383,8 @@ class _$LogFileRecordImpl
       @JsonKey(name: 'message') required this.message,
       @JsonKey(name: 'error') required this.error,
       @JsonKey(name: 'stack_trace') required this.stackTrace,
-      @JsonKey(name: 'time') @TimestampSerializer() required this.time});
+      @JsonKey(name: 'time') @TimestampSerializer() required this.time})
+      : super._();
 
   factory _$LogFileRecordImpl.fromJson(Map<String, dynamic> json) =>
       _$$LogFileRecordImplFromJson(json);
@@ -481,7 +480,7 @@ class _$LogFileRecordImpl
   }
 }
 
-abstract class _LogFileRecord implements LogFileRecord {
+abstract class _LogFileRecord extends LogFileRecord {
   const factory _LogFileRecord(
       {@JsonKey(name: 'logger_name') required final String loggerName,
       @JsonKey(name: 'id') required final int id,
@@ -496,6 +495,7 @@ abstract class _LogFileRecord implements LogFileRecord {
       @JsonKey(name: 'time')
       @TimestampSerializer()
       required final DateTime time}) = _$LogFileRecordImpl;
+  const _LogFileRecord._() : super._();
 
   factory _LogFileRecord.fromJson(Map<String, dynamic> json) =
       _$LogFileRecordImpl.fromJson;

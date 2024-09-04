@@ -36,9 +36,29 @@ sealed class LogFileRecord with _$LogFileRecord {
     @JsonKey(name: 'time') @TimestampSerializer() required DateTime time,
   }) = _LogFileRecord;
 
+  const LogFileRecord._();
+
   /// Create a LogFileRecord from JSON.
   factory LogFileRecord.fromJson(Map<String, Object?> json) =>
       _$LogFileRecordFromJson(json);
+
+  /// Get a formatted string.
+  String toFormattedString() {
+    final buffer = StringBuffer()
+      ..writeln('Session id: $sessionId\n')
+      ..writeln('Id: $id\n')
+      ..writeln('Timestamp: $recordTimestamp ($time)\n')
+      ..writeln('Logger name: $loggerName\n')
+      ..writeln('Level: ${level.name.toLowerCase()}\n')
+      ..writeln('Message: $message\n');
+    if (error != null) {
+      buffer.writeln('Error: $error\n');
+    }
+    if (stackTrace != null) {
+      buffer.writeln('Stack trace: \n$stackTrace\n');
+    }
+    return buffer.toString();
+  }
 }
 
 /// Timestamp serializer.
