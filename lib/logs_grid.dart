@@ -310,9 +310,57 @@ class _LogsGridState extends State<LogsGrid> {
     _selectRecord(0);
   }
 
-  void _toPrevSession() {}
+  void _toPrevSession() {
+    if (_selectedRecordIndex == null) {
+      _toFirstSession();
+      return;
+    }
 
-  void _toNextSession() {}
+    final selectedRecord = _getRecordByIndex(_selectedRecordIndex!);
+    for (var i = _selectedRecordIndex! - 1; i >= 0; i--) {
+      final record = _getRecordByIndex(i);
+      if (record.sessionId != selectedRecord.sessionId) {
+        final prevSessionId = record.sessionId;
+        var firstRecordOfPrevSessionIndex = i;
+        for (var j = i; j >= 0; j--) {
+          final prevRecord = _getRecordByIndex(j);
+          if (prevRecord.sessionId != prevSessionId) {
+            break;
+          }
+          firstRecordOfPrevSessionIndex = j;
+        }
+        _stateManager?.moveScrollByRow(
+          PlutoMoveDirection.up,
+          firstRecordOfPrevSessionIndex,
+        );
+        _selectRecord(firstRecordOfPrevSessionIndex);
+
+        break;
+      }
+    }
+  }
+
+  void _toNextSession() {
+    if (_selectedRecordIndex == null) {
+      _toLastSession();
+      return;
+    }
+
+    final selectedRecord = _getRecordByIndex(_selectedRecordIndex!);
+    for (var i = _selectedRecordIndex! + 1;
+        i < _stateManager!.refRows.length;
+        i++) {
+      final record = _getRecordByIndex(i);
+      if (record.sessionId != selectedRecord.sessionId) {
+        _stateManager?.moveScrollByRow(
+          PlutoMoveDirection.down,
+          i,
+        );
+        _selectRecord(i);
+        break;
+      }
+    }
+  }
 
   void _toLastSession() {
     final lastRow = _stateManager!.refRows.last;
