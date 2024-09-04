@@ -34,7 +34,7 @@ class _LogsGridState extends State<LogsGrid> {
 
   final levelFilderController = MultiSelectController<Level>();
 
-  LogFileRecord? _selectedRecord;
+  int? _selectedRecordIndex;
 
   @override
   void initState() {
@@ -161,17 +161,7 @@ class _LogsGridState extends State<LogsGrid> {
         .toList();
 
     _stateManager?.appendRows(_rows);
-
-    // _scrollToBottom();
-    // _toLastSession();
   }
-
-  // void _scrollToBottom() {
-  //   _stateManager?.moveScrollByRow(
-  //     PlutoMoveDirection.down,
-  //     _stateManager!.refRows.length,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -184,15 +174,10 @@ class _LogsGridState extends State<LogsGrid> {
         event.stateManager.setShowColumnFilter(true);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _levelFilterCheck();
-          // _toLastSession();
         });
-        // _levelFilterCheck();
-        // _scrollToBottom();
       },
       onSelected: (PlutoGridOnSelectedEvent event) {
-        final row = event.row;
-        final record = row!.data as LogFileRecord;
-        _selectRecord(record);
+        _selectRecord(event.rowIdx);
       },
       configuration: PlutoGridConfiguration(
         columnSize: const PlutoGridColumnSizeConfig(
@@ -317,15 +302,12 @@ class _LogsGridState extends State<LogsGrid> {
   }
 
   void _toFirstSession() {
-    final firstRow = _stateManager!.refRows.first;
-    final firstRecord = firstRow.data as LogFileRecord;
-
     _stateManager?.moveScrollByRow(
       PlutoMoveDirection.up,
       0,
     );
 
-    _selectRecord(firstRecord);
+    _selectRecord(0);
   }
 
   void _toPrevSession() {}
@@ -337,8 +319,6 @@ class _LogsGridState extends State<LogsGrid> {
     final lastRecord = lastRow.data as LogFileRecord;
 
     var firstRecordOfLastSessionIndex = _stateManager!.refRows.length - 1;
-    var firstRecordOfLastSession =
-        _getRecordByIndex(firstRecordOfLastSessionIndex);
 
     for (var i = _stateManager!.refRows.length - 1; i >= 0; i--) {
       final record = _getRecordByIndex(i);
@@ -346,7 +326,6 @@ class _LogsGridState extends State<LogsGrid> {
         break;
       }
       firstRecordOfLastSessionIndex = i;
-      firstRecordOfLastSession = record;
     }
 
     _stateManager?.moveScrollByRow(
@@ -354,7 +333,7 @@ class _LogsGridState extends State<LogsGrid> {
       firstRecordOfLastSessionIndex,
     );
 
-    _selectRecord(firstRecordOfLastSession);
+    _selectRecord(firstRecordOfLastSessionIndex);
   }
 
   LogFileRecord _getRecordByIndex(int index) {
@@ -362,9 +341,11 @@ class _LogsGridState extends State<LogsGrid> {
     return row.data as LogFileRecord;
   }
 
-  void _selectRecord(LogFileRecord record) {
-    _selectedRecord = record;
-    widget.controller.onRecordSelected(record);
+  void _selectRecord(int? index) {
+    _selectedRecordIndex = index;
+    if (index != null) {
+      widget.controller.onRecordSelected(_getRecordByIndex(index));
+    }
   }
 }
 
