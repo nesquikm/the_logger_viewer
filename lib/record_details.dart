@@ -22,51 +22,52 @@ class RecordDetails extends StatelessWidget {
     // ColoredBox(
     // color: record.level.color.withOpacity(0.4),
     // child:
-    return SelectionArea(
-      child: SingleChildScrollView(
-        child: Table(
-          columnWidths: const {
-            0: IntrinsicColumnWidth(),
-            1: FlexColumnWidth(),
-          },
-          children: [
+    // return SelectionArea(
+    // child:
+    return SingleChildScrollView(
+      child: Table(
+        columnWidths: const {
+          0: IntrinsicColumnWidth(),
+          1: FlexColumnWidth(),
+        },
+        children: [
+          _row(
+            'Session id',
+            record.sessionId.toString(),
+          ),
+          _row(
+            'Id',
+            record.id.toString(),
+          ),
+          _row(
+            'Timestamp',
+            '${record.recordTimestamp} (${record.time})',
+          ),
+          _row(
+            'Logger name',
+            record.loggerName,
+          ),
+          _row(
+            'Level',
+            record.level.name.toLowerCase(),
+          ),
+          _row(
+            'Message',
+            record.message,
+          ),
+          if (record.error != null)
             _row(
-              'Session id',
-              record.sessionId.toString(),
+              'Error',
+              record.error!,
             ),
+          if (record.stackTrace != null)
             _row(
-              'Id',
-              record.id.toString(),
+              'Stack trace',
+              record.stackTrace!,
             ),
-            _row(
-              'Timestamp',
-              '${record.recordTimestamp} (${record.time})',
-            ),
-            _row(
-              'Logger name',
-              record.loggerName,
-            ),
-            _row(
-              'Level',
-              record.level.name.toLowerCase(),
-            ),
-            _row(
-              'Message',
-              record.message,
-            ),
-            if (record.error != null)
-              _row(
-                'Error',
-                record.error!,
-              ),
-            if (record.stackTrace != null)
-              _row(
-                'Stack trace',
-                record.stackTrace!,
-              ),
-          ],
-        ),
+        ],
       ),
+      // ),
       // ),
       // ),
       // Align(
