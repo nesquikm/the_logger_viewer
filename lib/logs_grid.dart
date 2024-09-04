@@ -253,6 +253,10 @@ class _LogsGridState extends State<LogsGrid> {
         ),
       ];
     } else {
+      if (foundFilterRows.length > 1) {
+        foundFilterRows.removeRange(1, foundFilterRows.length);
+      }
+
       foundFilterRows.first.cells[FilterHelper.filterFieldValue]!.value =
           filteredLevelsJson;
       rows = _stateManager!.filterRows;
