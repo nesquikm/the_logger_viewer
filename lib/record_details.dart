@@ -15,8 +15,12 @@ class RecordDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final message = record.message;
-    final formattedMessage = record.message.prettyJson;
+    final formattedMessage = message.prettyJson;
     final hasFormattedMessage = message != formattedMessage;
+
+    final error = record.error;
+    final formattedError = error?.prettyJson;
+    final hasFormattedError = error != null && error != formattedError;
 
     return Stack(
       fit: StackFit.expand,
@@ -60,10 +64,15 @@ class RecordDetails extends StatelessWidget {
                     'Message',
                     message,
                   ),
-                  if (record.error != null)
+                  if (hasFormattedError)
+                    _row(
+                      'Formatted error',
+                      formattedError!,
+                    ),
+                  if (error != null)
                     _row(
                       'Error',
-                      record.error!,
+                      error,
                     ),
                   if (record.stackTrace != null)
                     _row(
