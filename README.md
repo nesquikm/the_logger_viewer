@@ -4,7 +4,7 @@ TheLogger viewer is a simple flutter app that allows you to view logs from the_l
 
 ## Features
 
-<img src="https://github.com/nesquikm/the_logger_viewer/raw/main/images/app_screenshot.png" width="300" alt="Colorful logging" align="right">
+<img src="https://github.com/nesquikm/the_logger_viewer/raw/master/images/app_screenshot.png" width="300" alt="Colorful logging" align="right">
 
 - Colorful presentation
 - Advanced filtering
