@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
-import 'package:the_logger_viewer/string_extensions.dart';
 
 /// Record details widget.
 class RecordDetails extends StatelessWidget {
@@ -14,14 +13,6 @@ class RecordDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final message = record.message;
-    final formattedMessage = message.prettyJson;
-    final hasFormattedMessage = message != formattedMessage;
-
-    final error = record.error;
-    final formattedError = error?.prettyJson;
-    final hasFormattedError = error != null && error != formattedError;
-
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -55,24 +46,24 @@ class RecordDetails extends StatelessWidget {
                     'Level',
                     record.level.name.toLowerCase(),
                   ),
-                  if (hasFormattedMessage)
+                  if (record.hasFormattedMessage)
                     _row(
                       'Formatted message',
-                      formattedMessage,
+                      record.formattedMessage,
                     ),
                   _row(
                     'Message',
-                    message,
+                    record.message,
                   ),
-                  if (hasFormattedError)
+                  if (record.hasFormattedError)
                     _row(
                       'Formatted error',
-                      formattedError!,
+                      record.formattedError!,
                     ),
-                  if (error != null)
+                  if (record.error != null)
                     _row(
                       'Error',
-                      error,
+                      record.error!,
                     ),
                   if (record.stackTrace != null)
                     _row(

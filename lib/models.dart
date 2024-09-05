@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:the_logger_viewer/string_extensions.dart';
 
 part 'models.freezed.dart';
 part 'models.g.dart';
@@ -49,16 +50,38 @@ sealed class LogFileRecord with _$LogFileRecord {
       ..writeln('Id: $id\n')
       ..writeln('Timestamp: $recordTimestamp ($time)\n')
       ..writeln('Logger name: $loggerName\n')
-      ..writeln('Level: ${level.name.toLowerCase()}\n')
-      ..writeln('Message: $message\n');
+      ..writeln('Level: ${level.name.toLowerCase()}\n');
+
+    if (hasFormattedMessage) {
+      buffer.writeln('Formatted message: $formattedMessage\n');
+    }
+
+    buffer.writeln('Message: $message\n');
+
+    if (hasFormattedError) {
+      buffer.writeln('Formatted error: $formattedError\n');
+    }
     if (error != null) {
       buffer.writeln('Error: $error\n');
     }
     if (stackTrace != null) {
       buffer.writeln('Stack trace: \n$stackTrace\n');
     }
+
     return buffer.toString();
   }
+
+  /// Get a formatted message.
+  String get formattedMessage => message.prettyJson;
+
+  /// Get a formatted error.
+  String? get formattedError => error?.prettyJson;
+
+  /// Check if the message can be formatted.
+  bool get hasFormattedMessage => message != formattedMessage;
+
+  /// Check if the error can be formatted.
+  bool get hasFormattedError => error != null && error != formattedError;
 }
 
 /// Timestamp serializer.

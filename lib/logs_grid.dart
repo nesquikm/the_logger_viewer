@@ -195,7 +195,7 @@ class _LogsGridState extends State<LogsGrid> {
           },
         ),
         style: const PlutoGridStyleConfig(
-          activatedColor: const Color.fromARGB(255, 70, 255, 60),
+          activatedColor: Color.fromARGB(255, 70, 255, 60),
           activatedBorderColor: Colors.black,
         ),
       ),
