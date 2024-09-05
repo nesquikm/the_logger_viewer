@@ -194,6 +194,10 @@ class _LogsGridState extends State<LogsGrid> {
             return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
           },
         ),
+        style: const PlutoGridStyleConfig(
+          activatedColor: const Color.fromARGB(255, 70, 255, 60),
+          activatedBorderColor: Colors.black,
+        ),
       ),
       rowColorCallback: (rowColorContext) {
         final record = rowColorContext.row.data as LogFileRecord;
