@@ -161,6 +161,9 @@ class _LogsGridState extends State<LogsGrid> {
         .toList();
 
     _stateManager?.appendRows(_rows);
+
+    _levelFilterCheck();
+    _stateManager?.resetScrollToZero();
   }
 
   @override
@@ -218,6 +221,10 @@ class _LogsGridState extends State<LogsGrid> {
   List<Level> _prevLevelsFilter = [];
 
   void _levelFilterCheck() {
+    if (_stateManager == null) {
+      return;
+    }
+
     List<PlutoRow<dynamic>> rows;
     final foundFilterRows = _stateManager!.filterRowsByField('level');
 
