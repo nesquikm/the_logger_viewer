@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -136,7 +137,7 @@ class _MainPageState extends State<MainPage> {
       final result = await FilePicker.platform.pickFiles(
         dialogTitle: 'Open a log file',
         type: FileType.custom,
-        allowedExtensions: ['json'],
+        allowedExtensions: ['json', 'gzip'],
         lockParentWindow: true,
       );
 
@@ -165,24 +166,27 @@ class _MainPageState extends State<MainPage> {
 
   Future<void> _decodeBytes(Uint8List bytes) async {
     try {
-      // TODO(nesquikm): bz2 decoder seems to be broken :(
-      // _log.fine('Decoding bytes, length: ${bytes.length}');
-      // final decoder = BZip2Decoder();
-      // final decodedBytes = decoder.decodeBytes(bytes);
-      // _log.fine('Decoded bytes, length: ${decodedBytes.length}');
+      Uint8List decodedBytes;
 
-      // final decodedString = utf8.decode(decodedBytes);
+      decodedBytes = bytes;
 
-      // _log.fine('Decoded string, length: ${decodedString.length}');
+      try {
+        decodedBytes = decodeGzip(bytes);
+      } catch (_) {
+        decodedBytes = bytes;
+      }
 
-      // await _readJson(decodedString);
-
-      // TODO(nesquikm): so let's use unpacked file for now
-      final decodedString = utf8.decode(bytes);
+      final decodedString = utf8.decode(decodedBytes);
       await _readJson(decodedString);
     } on Exception catch (e, s) {
       _showError('Failed to decode file', e, s);
     }
+  }
+
+  Uint8List decodeGzip(Uint8List bytes) {
+    //TODO(nesquikm): can't use gzip.decode because it's not available on web
+    // return Uint8List.fromList(gzip.decode(bytes));
+    return Uint8List.fromList(GZipDecoder().decodeBytes(bytes));
   }
 
   Future<void> _readJson(String string) async {
