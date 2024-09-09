@@ -18,8 +18,8 @@ class RecordDetails extends StatelessWidget {
       children: [
         ColoredBox(
           color: record.level.color.withOpacity(0.4),
-          child: SelectionArea(
-            child: SingleChildScrollView(
+          child: SingleChildScrollView(
+            child: SelectionArea(
               child: Table(
                 columnWidths: const {
                   0: IntrinsicColumnWidth(),
