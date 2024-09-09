@@ -92,7 +92,7 @@ class _LogsGridState extends State<LogsGrid> {
       ),
       PlutoColumn(
         title: 'Timestamp',
-        field: 'record_timestamp',
+        field: 'recordTimestamp',
         readOnly: true,
         suppressedAutoSize: true,
         enableSorting: false,
@@ -153,7 +153,7 @@ class _LogsGridState extends State<LogsGrid> {
             cells: {
               'sessionId': PlutoCell(value: record.sessionId),
               'id': PlutoCell(value: record.id),
-              'record_timestamp': PlutoCell(value: record.recordTimestamp),
+              'recordTimestamp': PlutoCell(value: record.recordTimestamp),
               'loggerName': PlutoCell(value: record.loggerName),
               'level': PlutoCell(value: record.level),
               'message': PlutoCell(
