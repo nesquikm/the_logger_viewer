@@ -28,6 +28,7 @@ class _MainPageState extends State<MainPage> {
 
   LogFile? _logFile;
   LogFileRecord? _selectedRecord;
+  Map<String, String> _filterValues = {};
 
   final _multiSplitViewcontroller = MultiSplitViewController(
     areas: [
@@ -48,6 +49,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     _logsGridController = LogsGridController(
       onRecordSelected: _onRecordSelected,
+      onFilterValues: _onFilterValues,
     );
   }
 
@@ -112,7 +114,10 @@ class _MainPageState extends State<MainPage> {
                   ? const Intro(
                       areaId: AreaId.details,
                     )
-                  : RecordDetails(record: _selectedRecord!),
+                  : RecordDetails(
+                      record: _selectedRecord!,
+                      filterValues: _filterValues,
+                    ),
               _ => throw UnimplementedError(),
             },
           ),
@@ -184,7 +189,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   Uint8List decodeGzip(Uint8List bytes) {
-    //TODO(nesquikm): can't use gzip.decode because it's not available on web
+    // TODO(nesquikm): can't use gzip.decode because it's not available on web
     // return Uint8List.fromList(gzip.decode(bytes));
     return Uint8List.fromList(GZipDecoder().decodeBytes(bytes));
   }
@@ -224,6 +229,12 @@ class _MainPageState extends State<MainPage> {
   void _onRecordSelected(LogFileRecord record) {
     setState(() {
       _selectedRecord = record;
+    });
+  }
+
+  void _onFilterValues(Map<String, String> values) {
+    setState(() {
+      _filterValues = values;
     });
   }
 }

@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
+import 'package:the_logger_viewer/text_extensions.dart';
 
 /// Record details widget.
 class RecordDetails extends StatelessWidget {
   /// Default constructor.
-  const RecordDetails({required this.record, super.key});
+  const RecordDetails({
+    required this.record,
+    required this.filterValues,
+    super.key,
+  });
 
   /// LogFile record.
   final LogFileRecord record;
+
+  /// Filter values.
+  final Map<String, String> filterValues;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +49,7 @@ class RecordDetails extends StatelessWidget {
                   _row(
                     'Logger name',
                     record.loggerName,
+                    highlight: filterValues['loggerName'],
                   ),
                   _row(
                     'Level',
@@ -50,20 +59,24 @@ class RecordDetails extends StatelessWidget {
                     _row(
                       'Formatted message',
                       record.formattedMessage,
+                      highlight: filterValues['message'],
                     ),
                   _row(
                     'Message',
                     record.message,
+                    highlight: filterValues['message'],
                   ),
                   if (record.hasFormattedError)
                     _row(
                       'Formatted error',
                       record.formattedError!,
+                      highlight: filterValues['error'],
                     ),
                   if (record.error != null)
                     _row(
                       'Error',
                       record.error!,
+                      highlight: filterValues['error'],
                     ),
                   if (record.stackTrace != null)
                     _row(
@@ -87,7 +100,11 @@ class RecordDetails extends StatelessWidget {
     );
   }
 
-  TableRow _row(String label, String value) {
+  TableRow _row(
+    String label,
+    String value, {
+    String? highlight,
+  }) {
     return TableRow(
       children: [
         Padding(
@@ -96,7 +113,7 @@ class RecordDetails extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Text('$value '),
+          child: Text('$value ').highlightSubstring(highlight),
         ),
       ],
     );

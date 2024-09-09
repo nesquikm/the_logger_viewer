@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
+import 'package:the_logger_viewer/custom_filter_resolver.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
 
@@ -35,6 +36,12 @@ class _LogsGridState extends State<LogsGrid> {
   final levelFilderController = MultiSelectController<Level>();
 
   int? _selectedRecordIndex;
+
+  static final _filtersToHighlight = [
+    'loggerName',
+    'message',
+    'error',
+  ];
 
   @override
   void initState() {
@@ -207,6 +214,8 @@ class _LogsGridState extends State<LogsGrid> {
             : Colors.grey.withOpacity(0.1);
         return Color.alphaBlend(foregroundColor, backgroundColor);
       },
+      notifierFilterResolver:
+          CustomFilterResolver(onChange: _gatherFilterValues),
     );
   }
 
@@ -274,6 +283,21 @@ class _LogsGridState extends State<LogsGrid> {
     }
 
     _stateManager!.setFilterWithFilterRows(rows);
+  }
+
+  void _gatherFilterValues(PlutoGridStateManager stateManager) {
+    final foundFilterRows = stateManager.filterRows;
+    final filters = <String, String>{};
+    for (final filterRow in foundFilterRows) {
+      final filterColumn =
+          filterRow.cells[FilterHelper.filterFieldColumn]?.value?.toString();
+      final filterValue = filterRow.cells[FilterHelper.filterFieldValue]?.value;
+      if (_filtersToHighlight.contains(filterColumn) && filterValue != null) {
+        filters[filterColumn!] = filterValue!.toString();
+      }
+    }
+
+    widget.controller.onFilterValues(filters);
   }
 
   Widget _levelColumnWidget() {
@@ -444,10 +468,14 @@ class LogsGridController {
   /// Default constructor.
   LogsGridController({
     required this.onRecordSelected,
+    required this.onFilterValues,
   });
 
   /// Callback when record is selected.
   final void Function(LogFileRecord record) onRecordSelected;
+
+  /// Callback when record is selected.
+  final void Function(Map<String, String> values) onFilterValues;
 
   /// Go to the first session.
   void toFirstSession() => _onToFirstSession();
