@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
+import 'package:the_logger_viewer/colors.dart';
 import 'package:the_logger_viewer/custom_filter_resolver.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';
@@ -202,17 +203,17 @@ class _LogsGridState extends State<LogsGrid> {
             return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
           },
         ),
-        style: const PlutoGridStyleConfig(
-          activatedColor: Color.fromARGB(255, 70, 255, 60),
-          activatedBorderColor: Colors.black,
+        style: PlutoGridStyleConfig(
+          activatedColor: AppColors.highlight,
+          activatedBorderColor: AppColors.activatedBorderColor,
         ),
       ),
       rowColorCallback: (rowColorContext) {
         final record = rowColorContext.row.data as LogFileRecord;
         final foregroundColor = record.level.color.withOpacity(0.4);
         final backgroundColor = rowColorContext.rowIdx.isEven
-            ? Colors.transparent
-            : Colors.grey.withOpacity(0.1);
+            ? AppColors.evenRowColor
+            : AppColors.oddRowColor;
         return Color.alphaBlend(foregroundColor, backgroundColor);
       },
       notifierFilterResolver:

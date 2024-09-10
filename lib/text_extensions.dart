@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_logger_viewer/colors.dart';
 
 /// Extension for Text widget to make a substring bold.
 extension TextExtensions on Text {
@@ -23,8 +24,8 @@ extension TextExtensions on Text {
       textSpans.add(
         TextSpan(
           text: matchedText,
-          style: const TextStyle(
-            backgroundColor: Color.fromARGB(255, 70, 255, 60),
+          style: TextStyle(
+            backgroundColor: AppColors.highlight,
           ),
         ),
       );
