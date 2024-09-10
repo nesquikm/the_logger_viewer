@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
 
   LogFile? _logFile;
   LogFileRecord? _selectedRecord;
-  Map<String, String> _filterValues = {};
+  Map<Fields, String> _filterValues = {};
 
   final _multiSplitViewcontroller = MultiSplitViewController(
     areas: [
@@ -232,7 +232,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void _onFilterValues(Map<String, String> values) {
+  void _onFilterValues(Map<Fields, String> values) {
     setState(() {
       _filterValues = values;
     });

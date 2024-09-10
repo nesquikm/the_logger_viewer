@@ -37,11 +37,11 @@ class _LogsGridState extends State<LogsGrid> {
 
   int? _selectedRecordIndex;
 
-  static final _filtersToHighlight = [
-    'loggerName',
-    'message',
-    'error',
-  ];
+  static final _filtersToHighlight = {
+    Fields.loggerName,
+    Fields.message,
+    Fields.error,
+  };
 
   @override
   void initState() {
@@ -68,8 +68,8 @@ class _LogsGridState extends State<LogsGrid> {
   void _initColumns() {
     _columns = <PlutoColumn>[
       PlutoColumn(
-        title: 'Session',
-        field: 'sessionId',
+        title: Fields.sessionId.displayName,
+        field: Fields.sessionId.name,
         readOnly: true,
         enableSorting: false,
         suppressedAutoSize: true,
@@ -80,8 +80,8 @@ class _LogsGridState extends State<LogsGrid> {
         ),
       ),
       PlutoColumn(
-        title: 'Id',
-        field: 'id',
+        title: Fields.id.displayName,
+        field: Fields.id.name,
         readOnly: true,
         suppressedAutoSize: true,
         width: 90,
@@ -91,8 +91,8 @@ class _LogsGridState extends State<LogsGrid> {
         ),
       ),
       PlutoColumn(
-        title: 'Timestamp',
-        field: 'recordTimestamp',
+        title: Fields.recordTimestamp.displayName,
+        field: Fields.recordTimestamp.name,
         readOnly: true,
         suppressedAutoSize: true,
         enableSorting: false,
@@ -101,8 +101,8 @@ class _LogsGridState extends State<LogsGrid> {
         type: PlutoColumnType.date(format: 'yyyy-MM-dd HH:mm:ss'),
       ),
       PlutoColumn(
-        title: 'Logger name',
-        field: 'loggerName',
+        title: Fields.loggerName.displayName,
+        field: Fields.loggerName.name,
         readOnly: true,
         suppressedAutoSize: true,
         enableSorting: false,
@@ -111,8 +111,8 @@ class _LogsGridState extends State<LogsGrid> {
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
-        title: 'Level',
-        field: 'level',
+        title: Fields.level.displayName,
+        field: Fields.level.name,
         readOnly: true,
         suppressedAutoSize: true,
         enableSorting: false,
@@ -123,8 +123,8 @@ class _LogsGridState extends State<LogsGrid> {
         filterWidget: _levelColumnWidget(),
       ),
       PlutoColumn(
-        title: 'Message',
-        field: 'message',
+        title: Fields.message.displayName,
+        field: Fields.message.name,
         readOnly: true,
         enableSorting: false,
         width: 250,
@@ -132,8 +132,8 @@ class _LogsGridState extends State<LogsGrid> {
         type: PlutoColumnType.text(),
       ),
       PlutoColumn(
-        title: 'Error',
-        field: 'error',
+        title: Fields.error.displayName,
+        field: Fields.error.name,
         readOnly: true,
         enableSorting: false,
         width: 250,
@@ -151,15 +151,16 @@ class _LogsGridState extends State<LogsGrid> {
           (record) => PlutoRow<LogFileRecord>(
             data: record,
             cells: {
-              'sessionId': PlutoCell(value: record.sessionId),
-              'id': PlutoCell(value: record.id),
-              'recordTimestamp': PlutoCell(value: record.recordTimestamp),
-              'loggerName': PlutoCell(value: record.loggerName),
-              'level': PlutoCell(value: record.level),
-              'message': PlutoCell(
+              Fields.sessionId.name: PlutoCell(value: record.sessionId),
+              Fields.id.name: PlutoCell(value: record.id),
+              Fields.recordTimestamp.name:
+                  PlutoCell(value: record.recordTimestamp),
+              Fields.loggerName.name: PlutoCell(value: record.loggerName),
+              Fields.level.name: PlutoCell(value: record.level),
+              Fields.message.name: PlutoCell(
                 value: record.message.replaceAll('\n', ' ').trim(),
               ),
-              'error': PlutoCell(
+              Fields.error.name: PlutoCell(
                 value: record.error?.replaceAll('\n', ' ').trim() ?? '',
               ),
             },
@@ -239,7 +240,7 @@ class _LogsGridState extends State<LogsGrid> {
     }
 
     List<PlutoRow<dynamic>> rows;
-    final foundFilterRows = _stateManager!.filterRowsByField('level');
+    final foundFilterRows = _stateManager!.filterRowsByField(Fields.level.name);
 
     final filteredValues =
         levelFilderController.selectedItems.map((i) => i.value).toList();
@@ -267,7 +268,7 @@ class _LogsGridState extends State<LogsGrid> {
       rows = [
         ..._stateManager!.filterRows,
         FilterHelper.createFilterRow(
-          columnField: 'level',
+          columnField: Fields.level.name,
           filterType: LevelFilter(),
           filterValue: filteredLevelsJson,
         ),
@@ -287,10 +288,14 @@ class _LogsGridState extends State<LogsGrid> {
 
   void _gatherFilterValues(PlutoGridStateManager stateManager) {
     final foundFilterRows = stateManager.filterRows;
-    final filters = <String, String>{};
+    final filters = <Fields, String>{};
     for (final filterRow in foundFilterRows) {
-      final filterColumn =
+      final filterColumnName =
           filterRow.cells[FilterHelper.filterFieldColumn]?.value?.toString();
+
+      final filterColumn =
+          filterColumnName != null ? Fields.fromString(filterColumnName) : null;
+
       final filterValue = filterRow.cells[FilterHelper.filterFieldValue]?.value;
       if (_filtersToHighlight.contains(filterColumn) && filterValue != null) {
         filters[filterColumn!] = filterValue!.toString();
@@ -439,7 +444,7 @@ class _LogsGridState extends State<LogsGrid> {
 /// Level filter.
 class LevelFilter extends PlutoFilterType {
   @override
-  String get title => 'Level';
+  String get title => Fields.level.displayName;
 
   @override
   PlutoCompareFunction get compare => ({
@@ -475,7 +480,7 @@ class LogsGridController {
   final void Function(LogFileRecord record) onRecordSelected;
 
   /// Callback when record is selected.
-  final void Function(Map<String, String> values) onFilterValues;
+  final void Function(Map<Fields, String> values) onFilterValues;
 
   /// Go to the first session.
   void toFirstSession() => _onToFirstSession();

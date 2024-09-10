@@ -17,7 +17,7 @@ class RecordDetails extends StatelessWidget {
   final LogFileRecord record;
 
   /// Filter values.
-  final Map<String, String> filterValues;
+  final Map<Fields, String> filterValues;
 
   @override
   Widget build(BuildContext context) {
@@ -35,52 +35,52 @@ class RecordDetails extends StatelessWidget {
                 },
                 children: [
                   _row(
-                    'Session id',
+                    Fields.sessionId.displayName,
                     record.sessionId.toString(),
                   ),
                   _row(
-                    'Id',
+                    Fields.id.displayName,
                     record.id.toString(),
                   ),
                   _row(
-                    'Timestamp',
+                    Fields.recordTimestamp.displayName,
                     '${record.recordTimestamp} (${record.time})',
                   ),
                   _row(
-                    'Logger name',
+                    Fields.loggerName.displayName,
                     record.loggerName,
-                    highlight: filterValues['loggerName'],
+                    highlight: filterValues[Fields.loggerName],
                   ),
                   _row(
-                    'Level',
+                    Fields.level.displayName,
                     record.level.name.toLowerCase(),
                   ),
                   if (record.hasFormattedMessage)
                     _row(
-                      'Formatted message',
+                      'Formatted ${Fields.message.displayName.toLowerCase()}',
                       record.formattedMessage,
-                      highlight: filterValues['message'],
+                      highlight: filterValues[Fields.message],
                     ),
                   _row(
-                    'Message',
+                    Fields.message.displayName,
                     record.message,
-                    highlight: filterValues['message'],
+                    highlight: filterValues[Fields.message],
                   ),
                   if (record.hasFormattedError)
                     _row(
-                      'Formatted error',
+                      'Formatted ${Fields.error.displayName.toLowerCase()}',
                       record.formattedError!,
-                      highlight: filterValues['error'],
+                      highlight: filterValues[Fields.error],
                     ),
                   if (record.error != null)
                     _row(
-                      'Error',
+                      Fields.error.displayName,
                       record.error!,
-                      highlight: filterValues['error'],
+                      highlight: filterValues[Fields.error],
                     ),
                   if (record.stackTrace != null)
                     _row(
-                      'Stack trace',
+                      Fields.stackTrace.displayName,
                       record.stackTrace!,
                     ),
                 ],

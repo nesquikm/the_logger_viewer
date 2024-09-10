@@ -173,25 +173,25 @@ LogFileRecord _$LogFileRecordFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LogFileRecord {
-  @JsonKey(name: 'logger_name')
+  @JsonKey(name: _loggerName)
   String get loggerName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'id')
+  @JsonKey(name: _id)
   int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'record_timestamp')
+  @JsonKey(name: _recordTimestamp)
   @DateTimeSerializer()
   DateTime get recordTimestamp => throw _privateConstructorUsedError;
-  @JsonKey(name: 'session_id')
+  @JsonKey(name: _sessionId)
   int get sessionId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'level')
+  @JsonKey(name: _level)
   @LevelSerializer()
   Level get level => throw _privateConstructorUsedError;
-  @JsonKey(name: 'message')
+  @JsonKey(name: _message)
   String get message => throw _privateConstructorUsedError;
-  @JsonKey(name: 'error')
+  @JsonKey(name: _error)
   String? get error => throw _privateConstructorUsedError;
-  @JsonKey(name: 'stack_trace')
+  @JsonKey(name: _stackTrace)
   String? get stackTrace => throw _privateConstructorUsedError;
-  @JsonKey(name: 'time')
+  @JsonKey(name: _time)
   @TimestampSerializer()
   DateTime get time => throw _privateConstructorUsedError;
 
@@ -208,17 +208,17 @@ abstract class $LogFileRecordCopyWith<$Res> {
       _$LogFileRecordCopyWithImpl<$Res, LogFileRecord>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'logger_name') String loggerName,
-      @JsonKey(name: 'id') int id,
-      @JsonKey(name: 'record_timestamp')
+      {@JsonKey(name: _loggerName) String loggerName,
+      @JsonKey(name: _id) int id,
+      @JsonKey(name: _recordTimestamp)
       @DateTimeSerializer()
       DateTime recordTimestamp,
-      @JsonKey(name: 'session_id') int sessionId,
-      @JsonKey(name: 'level') @LevelSerializer() Level level,
-      @JsonKey(name: 'message') String message,
-      @JsonKey(name: 'error') String? error,
-      @JsonKey(name: 'stack_trace') String? stackTrace,
-      @JsonKey(name: 'time') @TimestampSerializer() DateTime time});
+      @JsonKey(name: _sessionId) int sessionId,
+      @JsonKey(name: _level) @LevelSerializer() Level level,
+      @JsonKey(name: _message) String message,
+      @JsonKey(name: _error) String? error,
+      @JsonKey(name: _stackTrace) String? stackTrace,
+      @JsonKey(name: _time) @TimestampSerializer() DateTime time});
 }
 
 /// @nodoc
@@ -294,17 +294,17 @@ abstract class _$$LogFileRecordImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'logger_name') String loggerName,
-      @JsonKey(name: 'id') int id,
-      @JsonKey(name: 'record_timestamp')
+      {@JsonKey(name: _loggerName) String loggerName,
+      @JsonKey(name: _id) int id,
+      @JsonKey(name: _recordTimestamp)
       @DateTimeSerializer()
       DateTime recordTimestamp,
-      @JsonKey(name: 'session_id') int sessionId,
-      @JsonKey(name: 'level') @LevelSerializer() Level level,
-      @JsonKey(name: 'message') String message,
-      @JsonKey(name: 'error') String? error,
-      @JsonKey(name: 'stack_trace') String? stackTrace,
-      @JsonKey(name: 'time') @TimestampSerializer() DateTime time});
+      @JsonKey(name: _sessionId) int sessionId,
+      @JsonKey(name: _level) @LevelSerializer() Level level,
+      @JsonKey(name: _message) String message,
+      @JsonKey(name: _error) String? error,
+      @JsonKey(name: _stackTrace) String? stackTrace,
+      @JsonKey(name: _time) @TimestampSerializer() DateTime time});
 }
 
 /// @nodoc
@@ -373,50 +373,50 @@ class __$$LogFileRecordImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LogFileRecordImpl extends _LogFileRecord with DiagnosticableTreeMixin {
   const _$LogFileRecordImpl(
-      {@JsonKey(name: 'logger_name') required this.loggerName,
-      @JsonKey(name: 'id') required this.id,
-      @JsonKey(name: 'record_timestamp')
+      {@JsonKey(name: _loggerName) required this.loggerName,
+      @JsonKey(name: _id) required this.id,
+      @JsonKey(name: _recordTimestamp)
       @DateTimeSerializer()
       required this.recordTimestamp,
-      @JsonKey(name: 'session_id') required this.sessionId,
-      @JsonKey(name: 'level') @LevelSerializer() required this.level,
-      @JsonKey(name: 'message') required this.message,
-      @JsonKey(name: 'error') required this.error,
-      @JsonKey(name: 'stack_trace') required this.stackTrace,
-      @JsonKey(name: 'time') @TimestampSerializer() required this.time})
+      @JsonKey(name: _sessionId) required this.sessionId,
+      @JsonKey(name: _level) @LevelSerializer() required this.level,
+      @JsonKey(name: _message) required this.message,
+      @JsonKey(name: _error) required this.error,
+      @JsonKey(name: _stackTrace) required this.stackTrace,
+      @JsonKey(name: _time) @TimestampSerializer() required this.time})
       : super._();
 
   factory _$LogFileRecordImpl.fromJson(Map<String, dynamic> json) =>
       _$$LogFileRecordImplFromJson(json);
 
   @override
-  @JsonKey(name: 'logger_name')
+  @JsonKey(name: _loggerName)
   final String loggerName;
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: _id)
   final int id;
   @override
-  @JsonKey(name: 'record_timestamp')
+  @JsonKey(name: _recordTimestamp)
   @DateTimeSerializer()
   final DateTime recordTimestamp;
   @override
-  @JsonKey(name: 'session_id')
+  @JsonKey(name: _sessionId)
   final int sessionId;
   @override
-  @JsonKey(name: 'level')
+  @JsonKey(name: _level)
   @LevelSerializer()
   final Level level;
   @override
-  @JsonKey(name: 'message')
+  @JsonKey(name: _message)
   final String message;
   @override
-  @JsonKey(name: 'error')
+  @JsonKey(name: _error)
   final String? error;
   @override
-  @JsonKey(name: 'stack_trace')
+  @JsonKey(name: _stackTrace)
   final String? stackTrace;
   @override
-  @JsonKey(name: 'time')
+  @JsonKey(name: _time)
   @TimestampSerializer()
   final DateTime time;
 
@@ -482,17 +482,17 @@ class _$LogFileRecordImpl extends _LogFileRecord with DiagnosticableTreeMixin {
 
 abstract class _LogFileRecord extends LogFileRecord {
   const factory _LogFileRecord(
-      {@JsonKey(name: 'logger_name') required final String loggerName,
-      @JsonKey(name: 'id') required final int id,
-      @JsonKey(name: 'record_timestamp')
+      {@JsonKey(name: _loggerName) required final String loggerName,
+      @JsonKey(name: _id) required final int id,
+      @JsonKey(name: _recordTimestamp)
       @DateTimeSerializer()
       required final DateTime recordTimestamp,
-      @JsonKey(name: 'session_id') required final int sessionId,
-      @JsonKey(name: 'level') @LevelSerializer() required final Level level,
-      @JsonKey(name: 'message') required final String message,
-      @JsonKey(name: 'error') required final String? error,
-      @JsonKey(name: 'stack_trace') required final String? stackTrace,
-      @JsonKey(name: 'time')
+      @JsonKey(name: _sessionId) required final int sessionId,
+      @JsonKey(name: _level) @LevelSerializer() required final Level level,
+      @JsonKey(name: _message) required final String message,
+      @JsonKey(name: _error) required final String? error,
+      @JsonKey(name: _stackTrace) required final String? stackTrace,
+      @JsonKey(name: _time)
       @TimestampSerializer()
       required final DateTime time}) = _$LogFileRecordImpl;
   const _LogFileRecord._() : super._();
@@ -501,33 +501,33 @@ abstract class _LogFileRecord extends LogFileRecord {
       _$LogFileRecordImpl.fromJson;
 
   @override
-  @JsonKey(name: 'logger_name')
+  @JsonKey(name: _loggerName)
   String get loggerName;
   @override
-  @JsonKey(name: 'id')
+  @JsonKey(name: _id)
   int get id;
   @override
-  @JsonKey(name: 'record_timestamp')
+  @JsonKey(name: _recordTimestamp)
   @DateTimeSerializer()
   DateTime get recordTimestamp;
   @override
-  @JsonKey(name: 'session_id')
+  @JsonKey(name: _sessionId)
   int get sessionId;
   @override
-  @JsonKey(name: 'level')
+  @JsonKey(name: _level)
   @LevelSerializer()
   Level get level;
   @override
-  @JsonKey(name: 'message')
+  @JsonKey(name: _message)
   String get message;
   @override
-  @JsonKey(name: 'error')
+  @JsonKey(name: _error)
   String? get error;
   @override
-  @JsonKey(name: 'stack_trace')
+  @JsonKey(name: _stackTrace)
   String? get stackTrace;
   @override
-  @JsonKey(name: 'time')
+  @JsonKey(name: _time)
   @TimestampSerializer()
   DateTime get time;
   @override

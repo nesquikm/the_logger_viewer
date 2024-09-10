@@ -6,6 +6,65 @@ import 'package:the_logger_viewer/string_extensions.dart';
 part 'models.freezed.dart';
 part 'models.g.dart';
 
+const _loggerName = 'logger_name';
+const _id = 'id';
+const _recordTimestamp = 'record_timestamp';
+const _sessionId = 'session_id';
+const _level = 'level';
+const _message = 'message';
+const _error = 'error';
+const _stackTrace = 'stack_trace';
+const _time = 'time';
+
+/// Log record fields.
+enum Fields {
+  /// Logger name.
+  loggerName(_loggerName, 'Logger name'),
+
+  /// Id.
+  id(_id, 'Id'),
+
+  /// Record timestamp.
+  recordTimestamp(_recordTimestamp, 'Record timestamp'),
+
+  /// Session id.
+  sessionId(_sessionId, 'Session id'),
+
+  /// Level.
+  level(_level, 'Level'),
+
+  /// Message.
+  message(_message, 'Message'),
+
+  /// Error.
+  error(_error, 'Error'),
+
+  /// Stack trace.
+  stackTrace(_stackTrace, 'Stack trace'),
+
+  /// Time.
+  time(_time, 'Time');
+
+  const Fields(this.jsonName, this.displayName);
+
+  /// JSON name.
+  final String jsonName;
+
+  /// Display name.
+  final String displayName;
+
+  /// Get a list of display names.
+  static Fields fromString(String value) {
+    for (final field in Fields.values) {
+      if (field.name == value) {
+        return field;
+      }
+    }
+
+    throw ArgumentError('Unknown field: $value');
+  }
+}
+
 /// Log file model.
 @freezed
 sealed class LogFile with _$LogFile {
@@ -24,17 +83,17 @@ sealed class LogFile with _$LogFile {
 sealed class LogFileRecord with _$LogFileRecord {
   /// Default constructor.
   const factory LogFileRecord({
-    @JsonKey(name: 'logger_name') required String loggerName,
-    @JsonKey(name: 'id') required int id,
-    @JsonKey(name: 'record_timestamp')
+    @JsonKey(name: _loggerName) required String loggerName,
+    @JsonKey(name: _id) required int id,
+    @JsonKey(name: _recordTimestamp)
     @DateTimeSerializer()
     required DateTime recordTimestamp,
-    @JsonKey(name: 'session_id') required int sessionId,
-    @JsonKey(name: 'level') @LevelSerializer() required Level level,
-    @JsonKey(name: 'message') required String message,
-    @JsonKey(name: 'error') required String? error,
-    @JsonKey(name: 'stack_trace') required String? stackTrace,
-    @JsonKey(name: 'time') @TimestampSerializer() required DateTime time,
+    @JsonKey(name: _sessionId) required int sessionId,
+    @JsonKey(name: _level) @LevelSerializer() required Level level,
+    @JsonKey(name: _message) required String message,
+    @JsonKey(name: _error) required String? error,
+    @JsonKey(name: _stackTrace) required String? stackTrace,
+    @JsonKey(name: _time) @TimestampSerializer() required DateTime time,
   }) = _LogFileRecord;
 
   const LogFileRecord._();
@@ -46,26 +105,46 @@ sealed class LogFileRecord with _$LogFileRecord {
   /// Get a formatted string.
   String toFormattedString() {
     final buffer = StringBuffer()
-      ..writeln('Session id: $sessionId\n')
-      ..writeln('Id: $id\n')
-      ..writeln('Timestamp: $recordTimestamp ($time)\n')
-      ..writeln('Logger name: $loggerName\n')
-      ..writeln('Level: ${level.name.toLowerCase()}\n');
+      ..writeln(
+        '${Fields.sessionId.displayName}: $sessionId\n',
+      )
+      ..writeln(
+        '${Fields.id.displayName}: $id\n',
+      )
+      ..writeln(
+        '${Fields.recordTimestamp.displayName}: $recordTimestamp ($time)\n',
+      )
+      ..writeln(
+        '${Fields.loggerName.displayName}: $loggerName\n',
+      )
+      ..writeln(
+        '${Fields.level.displayName}: ${level.name.toLowerCase()}\n',
+      );
 
     if (hasFormattedMessage) {
-      buffer.writeln('Formatted message: $formattedMessage\n');
+      buffer.writeln(
+        '''Formatted ${Fields.message.displayName.toLowerCase()}: $formattedMessage\n''',
+      );
     }
 
-    buffer.writeln('Message: $message\n');
+    buffer.writeln(
+      '${Fields.message.displayName}: $message\n',
+    );
 
     if (hasFormattedError) {
-      buffer.writeln('Formatted error: $formattedError\n');
+      buffer.writeln(
+        '''Formatted ${Fields.error.displayName.toLowerCase()}: $formattedError\n''',
+      );
     }
     if (error != null) {
-      buffer.writeln('Error: $error\n');
+      buffer.writeln(
+        '${Fields.error.displayName}: $error\n',
+      );
     }
     if (stackTrace != null) {
-      buffer.writeln('Stack trace: \n$stackTrace\n');
+      buffer.writeln(
+        '${Fields.stackTrace.displayName}: \n$stackTrace\n',
+      );
     }
 
     return buffer.toString();
