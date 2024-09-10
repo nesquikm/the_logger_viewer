@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pluto_grid_plus/pluto_grid_plus.dart';
-import 'package:the_logger_viewer/colors.dart';
+import 'package:the_logger_viewer/app_colors.dart';
 import 'package:the_logger_viewer/custom_filter_resolver.dart';
 import 'package:the_logger_viewer/level_extensions.dart';
 import 'package:the_logger_viewer/models.dart';

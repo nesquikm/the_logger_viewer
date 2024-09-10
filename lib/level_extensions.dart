@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:the_logger_viewer/colors.dart';
+import 'package:the_logger_viewer/app_colors.dart';
 
 /// Extension for log levels.
 extension LevelExtensions on Level {

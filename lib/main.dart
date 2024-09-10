@@ -2,7 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:the_logger_viewer/colors.dart';
+import 'package:the_logger_viewer/app_colors.dart';
 import 'package:the_logger_viewer/main_page.dart';
 
 void main() {
