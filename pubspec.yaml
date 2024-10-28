@@ -38,7 +38,7 @@ dependencies:
   json_annotation: ^4.9.0
   logging: ^1.2.0
   multi_dropdown: ^3.0.1
-  multi_split_view: ^3.5.0
+  multi_split_view: ^3.6.0
   pluto_grid_plus: ^8.4.2
 
 dev_dependencies:

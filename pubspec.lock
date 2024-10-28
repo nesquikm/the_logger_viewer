@@ -452,10 +452,10 @@ packages:
     dependency: "direct main"
     description:
       name: multi_split_view
-      sha256: "30548c5e4cc6f24d5d4ca784dc5dff80d599ef1f704b1565819eb88a74f0eb62"
+      sha256: "99c02f128e7423818d13b8f2e01e3027e953b35508019dcee214791bd0525db5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   package_config:
     dependency: transitive
     description:
